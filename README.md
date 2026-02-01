@@ -1,158 +1,265 @@
-# AI Medical Content Generator
+# AI Medical Content
 
-A professional AI-powered medical content generation platform built with Laravel. Generate patient education materials, social media posts, SEO blog articles, and more for healthcare practices.
+<p align="center">
+  <img src="public/images/logo.svg" alt="AI Medical Content Logo" width="120">
+</p>
 
-## About The Project
+<p align="center">
+  <strong>AI-Powered Medical Content Generation Platform</strong>
+</p>
 
-AI Medical Content Generator is an intelligent platform designed for healthcare professionals to create high-quality, medically accurate content quickly and efficiently.
+<p align="center">
+  <a href="#features">Features</a> •
+  <a href="#installation">Installation</a> •
+  <a href="#configuration">Configuration</a> •
+  <a href="#usage">Usage</a> •
+  <a href="#api">API</a>
+</p>
 
-### Key Features
+---
 
-- **AI-Powered Content Generation**: Generate professional medical content using advanced AI
-- **Multiple Medical Specialties**: Dentistry, Dermatology, General Practice, Physiotherapy
-- **7 Content Types**: Patient Education, What to Expect, SEO Blog Articles, Social Media Posts, Google Review Replies, Email Follow-ups, Website FAQs
-- **Multi-Language Support**: English, Arabic, German, Spanish, French
-- **Subscription Management**: Integrated with Digistore24 for subscription billing
-- **Safety First**: Built-in compliance with healthcare communication standards
+## 🏥 About
 
-### Content Types
+**AI Medical Content** is a professional platform designed for healthcare professionals to create high-quality, medically accurate content quickly and efficiently. Powered by GPT-4o, it generates patient education materials, social media posts, SEO blog articles, and more.
 
-| Type | Description |
-|------|-------------|
-| Patient Education | Educational handouts for patients about procedures and conditions |
-| What to Expect | Pre-procedure information to prepare patients |
-| SEO Blog Article | Search-optimized articles for practice websites |
-| Social Media Post | Engaging posts for Facebook, Instagram, LinkedIn, TikTok |
-| Google Review Reply | Professional responses to patient reviews |
-| Email Follow-up | Post-appointment communication templates |
-| Website FAQ | Frequently asked questions for practice websites |
+## ✨ Features
 
-### Medical Specialties
+### Content Generation
+- 🤖 **AI-Powered**: Advanced GPT-4o model for high-quality medical content
+- 📝 **8 Content Types**: Patient Education, What to Expect, SEO Blogs, Social Media, Google Review Replies, Email Follow-ups, Website FAQs, University Lectures
+- 🏥 **4 Medical Specialties**: Dentistry, Dermatology, General Practice, Physiotherapy
+- 🌍 **Multi-Language**: English, Arabic, German, Spanish, French
 
-- **Dentistry**: Teeth whitening, implants, orthodontics, root canals, and more
-- **Dermatology**: Acne treatment, skin cancer awareness, anti-aging, eczema care
-- **General Clinic**: Health checkups, vaccinations, chronic disease management
-- **Physiotherapy**: Back pain relief, sports injuries, rehabilitation, posture improvement
+### Advanced Features
+- 📊 **SEO Scoring**: Real-time SEO analysis with recommendations
+- 📱 **Social Media Preview**: Live preview for Facebook, LinkedIn, Instagram, Twitter
+- 📅 **Content Calendar**: Schedule and manage content publishing
+- 👥 **Team Collaboration**: Invite team members, assign tasks, review workflow
+- 📈 **Analytics Dashboard**: Track content performance and usage
+- 🎨 **AI Refinement**: Enhance content with tone and style adjustments
+- 📤 **Export Options**: PDF and PowerPoint export capabilities
+- 💾 **Templates**: Save and reuse content templates
 
-## Technical Stack
+### Safety & Compliance
+- ✅ Medical disclaimer requirements
+- ✅ Non-diagnostic language guardrails
+- ✅ Patient-friendly terminology
+- ✅ Healthcare advertising compliance
 
-- **Framework**: Laravel 11.x
-- **Frontend**: Bootstrap 5, Blade Templates
-- **Database**: MySQL
-- **Payment**: Digistore24 IPN Integration
-- **Authentication**: Laravel Fortify with JWT
-- **Multi-Language**: Astrotomic Translatable
-- **Permissions**: Spatie Laravel Permission
+## 🛠 Technical Stack
 
-## Installation
+| Component | Technology |
+|-----------|------------|
+| Framework | Laravel 11.x |
+| Frontend | Bootstrap 5, Vite, Blade |
+| Database | MySQL 8.0 |
+| AI Model | OpenAI GPT-4o |
+| Payment | Digistore24 |
+| Authentication | Laravel Fortify + Sanctum |
+| Translations | Astrotomic Translatable |
+| Permissions | Spatie Laravel Permission |
+
+## 📦 Installation
 
 ### Prerequisites
 
 - PHP >= 8.2
-- Composer
-- MySQL >= 5.7
-- Node.js & NPM
+- Composer 2.x
+- MySQL >= 8.0
+- Node.js >= 18.x & NPM
 
-### Installation Steps
+### Quick Start
 
-1. **Clone the repository**
 ```bash
-git clone <repository-url>
+# Clone repository
+git clone https://github.com/your-org/AI-Content-Generator.git
 cd AI-Content-Generator
-```
 
-2. **Install PHP dependencies**
-```bash
+# Install dependencies
 composer install
-```
-
-3. **Install NPM dependencies**
-```bash
 npm install
-npm run build
-```
 
-4. **Environment Setup**
-```bash
-copy .env.example .env
+# Environment setup
+cp .env.example .env
 php artisan key:generate
-```
 
-5. **Configure Database**
+# Build assets
+npm run build
 
-Edit `.env` file:
-```env
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=AI_Medical_Content_Generator
-DB_USERNAME=root
-DB_PASSWORD=your_password
-```
+# Database setup
+php artisan migrate --seed
 
-6. **Configure Digistore24**
-
-Add to `.env`:
-```env
-DIGISTORE24_IPN_SIGNATURE_KEY=your_signature_key
-DIGISTORE24_API_KEY=your_api_key
-```
-
-7. **Run Migrations**
-```bash
-php artisan migrate
-```
-
-8. **Seed Database**
-```bash
-php artisan db:seed
-```
-
-9. **Start Development Server**
-```bash
+# Start server
 php artisan serve
 ```
 
-## Subscription Plans
+## ⚙️ Configuration
 
-| Plan | Price | Content/Month | Features |
+### Environment Variables
+
+```env
+# Application
+APP_NAME="AI Medical Content"
+APP_URL=http://localhost
+
+# Database
+DB_DATABASE=AI_Medical_Content_Generator
+DB_USERNAME=root
+DB_PASSWORD=your_password
+
+# OpenAI (Required)
+OPENAI_API_KEY=sk-your-api-key
+OPENAI_MODEL=gpt-4o
+
+# Digistore24 Payment (Required for subscriptions)
+DIGISTORE24_API_KEY=your_api_key
+DIGISTORE24_IPN_SIGNATURE_KEY=your_signature_key
+DIGISTORE24_VENDOR_ID=your_vendor_id
+
+# Email (Optional)
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USERNAME=your_email@gmail.com
+MAIL_PASSWORD=your_app_password
+```
+
+### Digistore24 Setup
+
+1. Create vendor account at [digistore24.com](https://www.digistore24.com)
+2. Create products for each subscription plan
+3. Configure IPN webhook URL: `https://your-domain.com/webhooks/digistore24`
+4. Add product IDs in admin panel
+
+## 💰 Subscription Plans
+
+| Plan | Price | Credits/Month | Features |
 |------|-------|---------------|----------|
-| Free Trial | €0 | 10 | 2 content types, 2 specialties |
-| Professional | €29 | 100 | All content types, all specialties |
-| Clinic Plus | €79 | 500 | Priority support, custom branding |
-| Enterprise | €199 | Unlimited | API access, dedicated support |
+| **Free** | $0 | 5 | Basic content types |
+| **Professional** | $49 | 100 | All features, all specialties |
+| **Clinic Plus** | $99 | 500 | Priority support, team collaboration |
+| **Enterprise** | $299 | 5,000 | API access, dedicated support |
 
-## User Roles
+## 👥 User Roles
 
-- **Admin**: Full system access
-- **Manager**: Content management, user oversight
-- **Subscriber**: Content generation access
+| Role | Permissions |
+|------|-------------|
+| **Admin** | Full system access, user management, settings |
+| **Manager** | Content management, team oversight |
+| **Subscriber** | Content generation, personal templates |
 
-## API Documentation
+## 🔌 API Documentation
 
-### Digistore24 Webhook
+### Authentication
 
+```bash
+POST /api/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "user@example.com",
+  "password": "password"
+}
 ```
-POST /api/digistore24/ipn
+
+### Generate Content
+
+```bash
+POST /api/v1/content/generate
+Authorization: Bearer {token}
+Content-Type: application/json
+
+{
+  "content_type_id": 1,
+  "specialty_id": 1,
+  "topic_id": 1,
+  "language": "en",
+  "word_count": 500
+}
 ```
 
-Handles subscription events:
-- `on_payment` - New subscription
+### Webhooks
+
+#### Digistore24 IPN
+```
+POST /webhooks/digistore24
+```
+
+Events handled:
+- `on_payment` - New/renewed subscription
 - `on_payment_missed` - Payment failed
 - `on_refund` - Subscription cancelled
+- `on_chargeback` - Payment disputed
 
-## Safety & Compliance
+## 📁 Project Structure
 
-All generated content includes:
-- Medical disclaimer requirements
-- Non-diagnostic language
-- Patient-friendly terminology
-- Compliance with healthcare advertising standards
+```
+AI-Content-Generator/
+├── app/
+│   ├── Http/Controllers/     # Web & API controllers
+│   ├── Models/               # Eloquent models
+│   ├── Services/             # Business logic services
+│   │   ├── ContentGeneratorService.php
+│   │   ├── CreditService.php
+│   │   ├── Digistore24Service.php
+│   │   ├── GuardrailService.php
+│   │   ├── OpenAIService.php
+│   │   └── SeoScoringService.php
+│   └── ...
+├── config/                   # Configuration files
+├── database/
+│   ├── migrations/           # Database migrations
+│   └── seeders/              # Data seeders
+├── resources/
+│   ├── css/                  # Stylesheets
+│   ├── js/                   # JavaScript files
+│   ├── lang/                 # Translations
+│   └── views/                # Blade templates
+├── routes/
+│   ├── api.php               # API routes
+│   ├── web.php               # Web routes
+│   └── dashboard.php         # Admin routes
+└── tests/                    # Unit & Feature tests
+```
 
-## License
+## 🧪 Testing
 
-Proprietary Software - All Rights Reserved
+```bash
+# Run all tests
+php artisan test
 
-## Support
+# Run specific test suite
+php artisan test --filter=CreditServiceTest
+php artisan test --filter=GuardrailServiceTest
 
-For support, email support@medical-ai-content.com
+# With coverage
+php artisan test --coverage
+```
+
+## 🚀 Deployment
+
+### Production Checklist
+
+- [ ] Set `APP_ENV=production` and `APP_DEBUG=false`
+- [ ] Configure production database
+- [ ] Set up SSL certificate
+- [ ] Configure Digistore24 webhook URL
+- [ ] Set up queue worker for background jobs
+- [ ] Configure email settings
+- [ ] Run `npm run build` for optimized assets
+- [ ] Run `php artisan optimize`
+
+## 📄 License
+
+Proprietary Software - All Rights Reserved © 2026
+
+## 📞 Support
+
+- **Email**: support@aimedicalcontent.com
+- **Documentation**: [docs.aimedicalcontent.com](https://docs.aimedicalcontent.com)
+
+---
+
+<p align="center">
+  Made with ❤️ for Healthcare Professionals
+</p>
