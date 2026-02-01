@@ -66,14 +66,14 @@ class UsersController extends Controller
             'email'      => ['required','string','email','max:255', Rule::unique(User::class)],
             'password'   => $this->passwordRules(),
             'image'      => ['nullable','image','mimes:jpg,jpeg,png','max:2048'],
+            'country_id' => ['required', 'integer', 'exists:countries,id'],
         ])->validate();
 
         $model = User::create([
             'name' => $input['name'],
             'phone'  => $input['phone'],
             'email'      => $input['email'],
-            'password'   => $input['password'],
-        ]);
+            'password'   => $input['password'],            'country_id' => $input['country_id'],        ]);
 
         if ($request->hasFile('image')) {
             $storedPath = $this->storeFile($request->file('image'), 'users');
@@ -101,12 +101,14 @@ class UsersController extends Controller
             'phone'  => ['required', 'string', 'max:255'],
             'email'      => ['required','string','email','max:255'],
             'image'      => ['nullable','image','mimes:jpg,jpeg,png','max:2048'],
+            'country_id' => ['required', 'integer', 'exists:countries,id'],
         ])->validate();
 
         $model->update([
             'name' => $input['name'],
             'phone'  => $input['phone'],
             'email'      => $input['email'],
+            'country_id' => $input['country_id'],
         ]);
 
         if ($request->hasFile('image')) {

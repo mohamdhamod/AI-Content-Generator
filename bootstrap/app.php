@@ -25,6 +25,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
             'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
             'locale' => \App\Http\Middleware\LocaleFromUrl::class,
+            'auto.locale' => \App\Http\Middleware\AutoDetectUserLocale::class,
             'subscription.active' => \App\Http\Middleware\EnsureActiveSubscription::class,
             'recaptcha' => \App\Http\Middleware\VerifyRecaptchaV3::class,
         ]);
@@ -38,6 +39,7 @@ return Application::configure(basePath: dirname(__DIR__))
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \App\Http\Middleware\Language::class,
+            \App\Http\Middleware\AutoDetectUserLocale::class,
             \App\Http\Middleware\VerifyRecaptchaV3::class,
         ]);
 

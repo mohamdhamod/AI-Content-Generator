@@ -31,6 +31,7 @@ class CreateNewUser implements CreatesNewUsers
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique(User::class)],
             'term_and_policy' => ['required', 'accepted'],
             'phone' => ['nullable', 'string', 'max:20'],
+            'country_id' => ['required', 'integer', 'exists:countries,id'],
         ]);
 
         $validator->validate();
@@ -73,10 +74,12 @@ class CreateNewUser implements CreatesNewUsers
                 'name' => $input['name'],
                 'email' => $email,
                 'phone' => $input['phone'] ?? null,
+                'country_id' => $input['country_id'],
                 'password' => $randomPassword,
                 'term_and_policy'=> $input['term_and_policy'] ?? 0,
                 'email_verified_at' => now(),
                 'google_id' => $googleId,
+                'locale_auto_detected' => false,
             ]);
             $user->assignRole(RoleEnum::SUBSCRIBER);
 

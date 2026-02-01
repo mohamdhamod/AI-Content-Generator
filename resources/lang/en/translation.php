@@ -265,7 +265,9 @@ return [
         'update_password_message' => 'We recommend updating your password regularly to keep your account secure.',
         'password_email_message' => 'Enter your email below and we will send you a link to reset your password. Please check your inbox for the reset link.',
         'profile' => 'Profile',
-        'new_here' => 'New here?'
+        'new_here' => 'New here?',
+        'country' => 'Country',
+        'select_country' => 'Select Country',
     ],
 
     'home' => [

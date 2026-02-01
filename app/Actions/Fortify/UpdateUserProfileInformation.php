@@ -23,6 +23,7 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
         Validator::make($input, [
             'name' => ['required', 'string', 'max:255'],
             'phone' => ['nullable', 'string', 'max:255'],
+            'country_id' => ['required', 'integer', 'exists:countries,id'],
 
             'email' => [
                 'required',
@@ -41,6 +42,7 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
             'name' => $input['name'],
             'phone' => $input['phone'],
             'email' => $input['email'],
+            'country_id' => $input['country_id'],
             'image' => $image,
         ];
 
@@ -64,6 +66,7 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
             'phone' => $data['phone'],
             'last_name' => $data['last_name'],
             'email' => $data['email'],
+            'country_id' => $data['country_id'],
             'email_verified_at' => null,
             'image' => $data['image'],
         ];

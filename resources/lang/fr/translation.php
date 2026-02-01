@@ -265,7 +265,9 @@ return [
         'update_password_message' => 'Nous recommandons de mettre à jour votre mot de passe régulièrement pour garder votre compte sécurisé.',
         'password_email_message' => 'Entrez votre e-mail ci-dessous et nous vous enverrons un lien pour réinitialiser votre mot de passe. Veuillez vérifier votre boîte de réception pour le lien de réinitialisation.',
         'profile' => 'Profil',
-        'new_here' => 'Nouveau ici ?'
+        'new_here' => 'Nouveau ici ?',
+        'country' => 'Pays',
+        'select_country' => 'Sélectionner le pays',
     ],
 
     'home' => [

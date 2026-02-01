@@ -17,11 +17,11 @@ export function initPhoneInputs() {
         
         // Initialize intl-tel-input
         const iti = intlTelInput(input, {
-            // Set United Kingdom as the default country
-            initialCountry: "gb",
+            // Set United States as the default country
+            initialCountry: "us",
             
-            // Preferred countries at the top (UK, France, Germany, USA, Saudi Arabia)
-            preferredCountries: ["gb", "fr", "de", "us", "sa"],
+            // Preferred countries at the top (USA, UK, Germany, France, Spain, Saudi Arabia)
+            preferredCountries: ["us", "gb", "de", "fr", "es", "sa"],
             
             // Only allow valid numbers
             strictMode: true,

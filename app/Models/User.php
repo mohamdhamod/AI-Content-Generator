@@ -22,6 +22,7 @@ class User extends Authenticatable implements MustVerifyEmail
     ];
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'locale_auto_detected' => 'boolean',
     ];
 
     public function getFirstNameAttribute()

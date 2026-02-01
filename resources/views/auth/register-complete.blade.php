@@ -63,6 +63,25 @@
                                 <input type="tel" id="phone" name="phone" class="form-control" value="{{ old('phone') }}">
                             </div>
 
+                                <div class="mb-3">
+                                    <label for="country_id" class="form-label">
+                                        {{ __('translation.auth.country') }} <span class="text-danger">*</span>
+                                    </label>
+                                    <select id="country_id" name="country_id" class="form-select select2" required>
+                                        <option value="">{{ __('translation.auth.select_country') }}</option>
+                                        @foreach(\App\Models\Country::where('is_active', 1)->orderedWithPriority()->get() as $country)
+                                            <option value="{{ $country->id }}" 
+                                                    data-flag="{{ $country->flag_url }}" 
+                                                    {{ old('country_id') == $country->id ? 'selected' : '' }}>
+                                                {{ $country->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('country_id')
+                                    <span class="invalid-feedback d-block"><strong>{{ $message }}</strong></span>
+                                    @enderror
+                                </div>
+
                                 <div class="mb-4">
                                     <div class="form-check">
                                         <input type="checkbox" id="term_and_policy" name="term_and_policy" class="form-check-input fs-16" value="1" required>
@@ -113,6 +132,37 @@
         document.addEventListener('DOMContentLoaded', function() {
             try { if (window.bindPasswordToggle) bindPasswordToggle(); } catch(e) { console.error(e); }
             try { if (window.handleSubmit) handleSubmit('#formRegisterComplete'); } catch(e) { console.error(e); }
+            
+            // Initialize Select2 for country dropdown with flags
+            if (typeof $.fn.select2 !== 'undefined') {
+                $('#country_id').select2({
+                    placeholder: '{{ __('translation.auth.select_country') }}',
+                    allowClear: false,
+                    width: '100%',
+                    templateResult: formatCountryOption,
+                    templateSelection: formatCountryOption
+                });
+            }
         });
+
+        // Format country option with flag
+        function formatCountryOption(country) {
+            if (!country.id) {
+                return country.text;
+            }
+            
+            var flagUrl = $(country.element).data('flag');
+            if (!flagUrl) {
+                return country.text;
+            }
+            
+            var $country = $(
+                '<span style="display: flex; align-items: center;">' +
+                '<img src="' + flagUrl + '" class="img-flag" style="width: 20px; height: 15px; margin-right: 8px; object-fit: cover; border: 1px solid #ddd;" onerror="this.style.display=\'none\'" /> ' +
+                '<span>' + country.text + '</span>' +
+                '</span>'
+            );
+            return $country;
+        }
     </script>
 @endpush
