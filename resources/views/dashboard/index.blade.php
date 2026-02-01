@@ -519,21 +519,47 @@
 }
 </style>
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
     // Get CSS variables for colors
     const rootStyles = getComputedStyle(document.documentElement);
-    const primaryColor = rootStyles.getPropertyValue('--ins-primary').trim();
-    const primaryRgba = hexToRgba(primaryColor || '#0d6efd', 0.1);
+    const primaryColor = rootStyles.getPropertyValue('--ins-primary').trim() || '#0d6efd';
     
     function hexToRgba(hex, alpha) {
-        const r = parseInt(hex.slice(1, 3), 16);
-        const g = parseInt(hex.slice(3, 5), 16);
-        const b = parseInt(hex.slice(5, 7), 16);
+        // Handle both #RGB and #RRGGBB formats
+        let r, g, b;
+        if (hex.length === 4) {
+            r = parseInt(hex[1] + hex[1], 16);
+            g = parseInt(hex[2] + hex[2], 16);
+            b = parseInt(hex[3] + hex[3], 16);
+        } else {
+            r = parseInt(hex.slice(1, 3), 16);
+            g = parseInt(hex.slice(3, 5), 16);
+            b = parseInt(hex.slice(5, 7), 16);
+        }
         return `rgba(${r}, ${g}, ${b}, ${alpha})`;
     }
     
+    const primaryRgba = hexToRgba(primaryColor, 0.1);
+    
     const contentCtx = document.getElementById('contentChart');
     if (contentCtx) {
+        // Wait for Chart.js to be loaded via lazy loading
+        let Chart = window.Chart;
+        if (!Chart) {
+            // Manually initialize charts if not already done
+            if (typeof window.initializeCharts === 'function') {
+                await window.initializeCharts();
+            }
+            Chart = window.Chart;
+        }
+        
+        // If still not available, dynamically import
+        if (!Chart) {
+            const ChartModule = await import('chart.js/auto');
+            Chart = ChartModule.default || ChartModule;
+            window.Chart = Chart;
+        }
+        
         const contentData = @json($contentChartData ?? ['labels' => [], 'values' => []]);
         
         new Chart(contentCtx, {
@@ -551,10 +577,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     pointRadius: 4,
                     pointHoverRadius: 6,
                     pointBackgroundColor: primaryColor,
-                    pointBorderColor: 'var(--ins-white)',
+                    pointBorderColor: '#ffffff',
                     pointBorderWidth: 2,
                     pointHoverBackgroundColor: primaryColor,
-                    pointHoverBorderColor: 'var(--ins-white)',
+                    pointHoverBorderColor: '#ffffff',
                     pointHoverBorderWidth: 2
                 }]
             },
@@ -571,9 +597,9 @@ document.addEventListener('DOMContentLoaded', function() {
                         display: false 
                     },
                     tooltip: {
-                        backgroundColor: 'rgba(var(--ins-black-rgb), 0.8)',
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
                         padding: 12,
-                        borderRadius: 8,
+                        cornerRadius: 8,
                         titleFont: { size: 14, weight: 'bold' },
                         bodyFont: { size: 13 },
                         displayColors: false
@@ -592,7 +618,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     y: {
                         beginAtZero: true,
                         grid: { 
-                            color: 'var(--ins-gray-100)',
+                            color: 'rgba(0, 0, 0, 0.05)',
                             drawBorder: false
                         },
                         ticks: { 

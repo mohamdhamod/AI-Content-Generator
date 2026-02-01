@@ -1,0 +1,23 @@
+<?php
+
+return [
+    /*
+    |--------------------------------------------------------------------------
+    | Authentication Language Lines
+    |--------------------------------------------------------------------------
+    |
+    | The following language lines are used during authentication for various
+    | messages that we need to display to the user. You are free to modify
+    | these language lines according to your application's requirements.
+    |
+    */
+
+    'failed' => 'Ces identifiants ne correspondent pas à nos enregistrements.',
+    'password' => 'Le mot de passe fourni est incorrect.',
+    'throttle' => 'Trop de tentatives de connexion. Veuillez réessayer dans :seconds secondes.',
+    'token_required' => 'Le token est requis',
+    'invalid_token' => 'Token invalide ou expiré',
+    'session_expired' => 'La session a expiré',
+    'access_denied' => 'Accès refusé',
+    'session_ended' => 'Session terminée avec succès',
+];
