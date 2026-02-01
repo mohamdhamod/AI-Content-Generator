@@ -1,0 +1,234 @@
+<?php
+
+namespace App\Services;
+
+use App\Models\ContentType;
+use App\Models\PromptTemplate;
+use App\Models\Specialty;
+use App\Models\Topic;
+
+class PromptBuilderService
+{
+    /**
+     * Global disclaimer to append to all generated content.
+     */
+    protected string $globalDisclaimer;
+
+    /**
+     * Global rules for all prompts.
+     */
+    protected array $globalRules;
+
+    public function __construct()
+    {
+        $this->globalDisclaimer = config('content.disclaimer', 
+            "This content is for educational purposes only and does not replace professional medical consultation."
+        );
+
+        $this->globalRules = [
+            "DO NOT diagnose any condition",
+            "DO NOT prescribe any medication or treatment",
+            "DO NOT suggest specific treatments or procedures",
+            "Provide educational and informational content ONLY",
+            "Use patient-friendly language",
+            "Do NOT make medical guarantees",
+            "Always recommend consulting a healthcare professional",
+        ];
+    }
+
+    /**
+     * Build complete prompt for content generation.
+     * 
+     * @param int $contentTypeId The content type ID
+     * @param int|null $specialtyId The specialty ID (optional)
+     * @param int|null $topicId The topic ID (optional) - NEW
+     * @param array $inputData User input data
+     * @param string $locale Language locale
+     */
+    public function buildPrompt(
+        int $contentTypeId,
+        ?int $specialtyId,
+        ?int $topicId,
+        array $inputData,
+        string $locale = 'en'
+    ): array {
+        $template = PromptTemplate::findTemplate($specialtyId, $contentTypeId, $locale);
+        
+        // Load topic if provided
+        $topic = $topicId ? Topic::with('translations')->find($topicId) : null;
+        
+        // Add topic context to input data
+        if ($topic) {
+            $inputData['topic_context'] = $topic->getPromptContext();
+            $inputData['topic_name'] = $topic->name;
+        }
+
+        if (!$template) {
+            return $this->buildDefaultPrompt($contentTypeId, $specialtyId, $topic, $inputData, $locale);
+        }
+
+        $systemPrompt = $this->buildSystemPrompt($template, $topic);
+        $userPrompt = $this->buildUserPrompt($template, $inputData, $topic);
+
+        return [
+            'system_prompt' => $systemPrompt,
+            'user_prompt' => $userPrompt,
+        ];
+    }
+
+    /**
+     * Build system prompt with global rules and topic context.
+     */
+    protected function buildSystemPrompt(PromptTemplate $template, ?Topic $topic = null): string
+    {
+        $rules = implode("\n- ", $this->globalRules);
+        
+        $systemPrompt = $template->system_prompt . "\n\n" .
+            "IMPORTANT RULES (MUST FOLLOW):\n- " . $rules;
+        
+        // Add topic-specific context if available
+        if ($topic && $topic->prompt_hint) {
+            $systemPrompt .= "\n\nTOPIC-SPECIFIC GUIDELINES:\n" . $topic->prompt_hint;
+        }
+        
+        $systemPrompt .= "\n\nDISCLAIMER TO INCLUDE AT END:\n" . $this->globalDisclaimer;
+        
+        return $systemPrompt;
+    }
+
+    /**
+     * Build user prompt by replacing placeholders.
+     */
+    protected function buildUserPrompt(PromptTemplate $template, array $inputData, ?Topic $topic = null): string
+    {
+        $prompt = $template->user_prompt_template;
+
+        // Replace placeholders with actual values
+        foreach ($inputData as $key => $value) {
+            $prompt = str_replace('{' . $key . '}', $value, $prompt);
+        }
+        
+        // Add topic context if not already in template
+        if ($topic && !str_contains($prompt, $topic->name)) {
+            $topicSection = "\n\nSPECIFIC TOPIC: {$topic->name}";
+            if ($topic->description) {
+                $topicSection .= "\nTopic Details: {$topic->description}";
+            }
+            $prompt .= $topicSection;
+        }
+
+        // Remove any unreplaced placeholders
+        $prompt = preg_replace('/\{[a-z_]+\}/', '', $prompt);
+
+        return $prompt;
+    }
+
+    /**
+     * Build default prompt when no template exists.
+     */
+    protected function buildDefaultPrompt(
+        int $contentTypeId,
+        ?int $specialtyId,
+        ?Topic $topic,
+        array $inputData,
+        string $locale
+    ): array {
+        $contentType = ContentType::find($contentTypeId);
+        $specialty = $specialtyId ? Specialty::find($specialtyId) : null;
+
+        $specialtyName = $specialty?->name ?? 'medical';
+        $contentTypeName = $contentType?->name ?? 'content';
+        $userTopic = $inputData['topic'] ?? 'general health';
+        $language = $inputData['language'] ?? 'English';
+        $wordCount = $inputData['word_count'] ?? 500;
+        $tone = $inputData['tone'] ?? 'professional and friendly';
+
+        $rules = implode("\n- ", $this->globalRules);
+
+        // Build enhanced system prompt
+        $systemPrompt = "You are a professional medical content writer specializing in {$specialtyName}.
+You create educational, patient-friendly content for healthcare clinics.
+
+IMPORTANT RULES (MUST FOLLOW):
+- {$rules}";
+
+        // Add topic-specific guidelines if available
+        if ($topic) {
+            $systemPrompt .= "\n\nSPECIFIC TOPIC CONTEXT:
+Topic: {$topic->name}";
+            
+            if ($topic->description) {
+                $systemPrompt .= "\nDescription: {$topic->description}";
+            }
+            
+            if ($topic->prompt_hint) {
+                $systemPrompt .= "\n\nTOPIC-SPECIFIC GUIDELINES:\n{$topic->prompt_hint}";
+            }
+        }
+
+        $systemPrompt .= "
+
+Always write in {$language}.
+Keep the tone {$tone}.
+
+DISCLAIMER TO INCLUDE AT END:
+{$this->globalDisclaimer}";
+
+        // Build user prompt with topic details
+        $topicDetails = $topic 
+            ? "Topic: {$topic->name}" . ($topic->description ? "\nDetails: {$topic->description}" : "")
+            : "Topic: {$userTopic}";
+
+        $userPrompt = "Write {$contentTypeName} content.
+
+{$topicDetails}
+
+Specialty: {$specialtyName}
+Target word count: approximately {$wordCount} words
+Language: {$language}
+
+User's specific request: {$userTopic}
+
+Requirements:
+- Educational and informational only
+- Patient-friendly language
+- No medical advice or diagnosis
+- Focus specifically on the topic mentioned
+- Include the disclaimer at the end";
+
+        return [
+            'system_prompt' => $systemPrompt,
+            'user_prompt' => $userPrompt,
+        ];
+    }
+
+    /**
+     * Get required fields for a content type.
+     */
+    public function getRequiredFields(int $contentTypeId, ?int $specialtyId = null, string $locale = 'en'): array
+    {
+        $template = PromptTemplate::findTemplate($specialtyId, $contentTypeId, $locale);
+
+        if ($template && $template->required_fields) {
+            return $template->required_fields;
+        }
+
+        // Default required fields
+        return ['topic'];
+    }
+
+    /**
+     * Get optional fields for a content type.
+     */
+    public function getOptionalFields(int $contentTypeId, ?int $specialtyId = null, string $locale = 'en'): array
+    {
+        $template = PromptTemplate::findTemplate($specialtyId, $contentTypeId, $locale);
+
+        if ($template && $template->optional_fields) {
+            return $template->optional_fields;
+        }
+
+        // Default optional fields
+        return ['word_count', 'tone', 'target_audience', 'country'];
+    }
+}

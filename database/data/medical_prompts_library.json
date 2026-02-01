@@ -1,0 +1,70 @@
+{
+  "global_rules": {
+    "content_restrictions": {
+      "non_diagnostic": true,
+      "no_medical_advice": true,
+      "no_treatment_plans": true,
+      "no_prescriptions": true,
+      "no_medications": true,
+      "no_dosages": true,
+      "no_self_diagnosis": true,
+      "no_specific_medical_instructions": true
+    },
+    "content_requirements": {
+      "educational_only": true,
+      "informational_only": true,
+      "patient_friendly_language": true,
+      "legally_safe": true,
+      "encourage_professional_consultation": true,
+      "culturally_sensitive": true,
+      "evidence_based": true
+    },
+    "mandatory_disclaimers": {
+      "en": "This content is for educational purposes only and does not replace professional medical consultation. Always consult with a qualified healthcare provider for medical advice.",
+      "ar": "هذا المحتوى للأغراض التعليمية فقط ولا يحل محل الاستشارة الطبية المهنية. استشر دائماً مقدم رعاية صحية مؤهل للحصول على المشورة الطبية.",
+      "de": "Dieser Inhalt dient nur zu Bildungszwecken und ersetzt keine professionelle medizinische Beratung. Konsultieren Sie immer einen qualifizierten Gesundheitsdienstleister für medizinische Ratschläge.",
+      "es": "Este contenido es solo con fines educativos y no reemplaza la consulta médica profesional. Siempre consulte con un proveedor de atención médica calificado para obtener asesoramiento médico.",
+      "fr": "Ce contenu est uniquement à des fins éducatives et ne remplace pas une consultation médicale professionnelle. Consultez toujours un professionnel de santé qualifié pour des conseils médicaux."
+    },
+    "prohibited_content": [
+      "Specific diagnoses or self-diagnosis tools",
+      "Treatment protocols or medical procedures",
+      "Medication names, dosages, or prescriptions",
+      "Before/after medical treatment photos",
+      "Personal health data or patient identifiable information",
+      "Medical emergency instructions (direct to call emergency services)",
+      "Alternative medicine claims without scientific evidence"
+    ],
+    "required_elements": [
+      "Professional consultation encouragement",
+      "Appropriate medical disclaimer",
+      "Clear, patient-friendly language",
+      "Culturally sensitive content",
+      "Evidence-based information only"
+    ],
+    "supported_languages": "Defined in config/languages.php",
+    "default_tone": "professional, empathetic, patient-friendly, reassuring, non-judgmental"
+  },
+  "metadata": {
+    "version": "2.0.0",
+    "created_date": "2026-01-29",
+    "last_updated": "2026-01-30",
+    "author": "Senior Laravel Architect + AI Product Designer + Senior AI Prompt Engineer + Senior Doctor",
+    "purpose": "Global medical content generation rules - Specialties, Topics, and Content Types are managed in database",
+    "architecture": "Hybrid System: Global rules (JSON) + Specialties/Topics/Content Types (Database)",
+    "database_tables": {
+      "specialties": "11 medical specialties with translations",
+      "topics": "121 medical topics with prompt_hint field",
+    "data_sources": "Hybrid system combining JSON (global rules) with database (specialties, topics, content types). Content types are stored in 'content_types' and 'content_type_translations' tables."
+    },
+    "compliance": [
+      "HIPAA-aware content guidelines",
+      "GDPR compliant",
+      "Non-diagnostic content only",
+      "Educational purposes only",
+      "Legally safe for global markets",
+      "Medical board compliant"
+    ],
+    "workflow": "User selects Language → Specialty → Topic → Content Type → System merges global rules + topic prompt_hint → AI generates compliant content"
+  }
+}
