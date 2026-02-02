@@ -77,7 +77,7 @@
                                      data-type-id="{{ $type->id }}"
                                      data-type-slug="{{ $type->slug }}">
                                     <div class="type-icon">
-                                        <i class="{{ $type->icon ?? 'fas fa-file-alt' }}"></i>
+                                        <i class="fas {{ $type->icon ?? 'fa-file-alt' }}"></i>
                                     </div>
                                     <span class="type-name">{{ $type->name }}</span>
                                 </div>
@@ -156,7 +156,7 @@
                                         <div class="quick-card" 
                                              data-type-id="{{ $type->id }}"
                                              data-prompt="{{ $type->prompt_template ?? __('translation.content_generator.chat.generate_prompt', ['type' => $type->name]) }}">
-                                            <i class="{{ $type->icon ?? 'fas fa-file-alt' }}"></i>
+                                            <i class="fas {{ $type->icon ?? 'fa-file-alt' }}"></i>
                                             <span>{{ $type->name }}</span>
                                             @if($type->description)
                                                 <small class="type-description">{{ Str::limit($type->description, 50) }}</small>
@@ -285,7 +285,7 @@
             <div class="content-type-grid mobile">
                 @foreach($contentTypes ?? [] as $type)
                     <div class="content-type-item" data-type-id="{{ $type->id }}">
-                        <i class="{{ $type->icon ?? 'fas fa-file-alt' }}"></i>
+                        <i class="fas {{ $type->icon ?? 'fa-file-alt' }}"></i>
                         <span>{{ $type->name }}</span>
                     </div>
                 @endforeach
