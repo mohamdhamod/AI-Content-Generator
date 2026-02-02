@@ -69,6 +69,13 @@ class HomeController extends Controller
                     'credits_available' => $this->calculateAvailableCredits($user),
                     'total_generated' => $user->generatedContents()->count(),
                 ];
+                
+                // Debug: Log the credits value
+                \Log::info('Home page credits', [
+                    'user_id' => $user->id,
+                    'credits_available' => $userData['credits_available'],
+                    'has_subscription' => $user->activeSubscription ? 'yes' : 'no',
+                ]);
             }
 
             return view('home.index', compact('stats', 'featuredSpecialties', 'recentGenerations', 'subscriptionPlans', 'userData'));

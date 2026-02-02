@@ -10,7 +10,12 @@
                 @auth
                     <span class="badge bg-success-subtle text-success px-3 py-2 mb-3 border border-success border-opacity-25">
                         <i class="bi bi-check-circle-fill me-1"></i>
-                        {{ $userData['credits_available'] ?? 0 }} {{ __('translation.home.credits_available') }}
+                        @if(($userData['credits_available'] ?? 0) == -1)
+                            {{ __('translation.content_generator.unlimited') }}
+                        @else
+                            {{ $userData['credits_available'] ?? 0 }}
+                        @endif
+                        {{ __('translation.home.credits_available') }}
                     </span>
                 @else
                     <span class="badge bg-primary text-white px-3 py-2 mb-3 shadow-sm">
@@ -410,7 +415,16 @@
                     </div>
                     <h4 class="text-white fw-bold mb-2">{{ __('translation.home.auth_cta_title') }}</h4>
                     <p class="text-white opacity-90 mb-3">
-                        {{ __('translation.home.you_have') }} <strong>{{ $userData['credits_available'] ?? 0 }} {{ __('translation.home.credits_text') }}</strong> {{ __('translation.home.available') }}.
+                        {{ __('translation.home.you_have') }} 
+                        <strong>
+                            @if(($userData['credits_available'] ?? 0) == -1)
+                                {{ __('translation.content_generator.unlimited') }}
+                            @else
+                                {{ $userData['credits_available'] ?? 0 }}
+                            @endif
+                            {{ __('translation.home.credits_text') }}
+                        </strong> 
+                        {{ __('translation.home.available') }}.
                     </p>
                     
                     <div class="d-flex flex-wrap gap-2 justify-content-center">
