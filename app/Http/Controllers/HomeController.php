@@ -66,7 +66,7 @@ class HomeController extends Controller
                 $user = auth()->user();
                 $userData = [
                     'active_subscription' => $user->activeSubscription,
-                    'credits_available' => $user->monthly_credits - $user->used_credits,
+                    'credits_available' => $this->calculateAvailableCredits($user),
                     'total_generated' => $user->generatedContents()->count(),
                 ];
             }
@@ -176,6 +176,34 @@ class HomeController extends Controller
         $result = $digistore24Service->processIpn($data);
 
         return response()->json($result);
+    }
+
+    /**
+     * Calculate available credits for a user based on their subscription.
+     */
+    private function calculateAvailableCredits($user): int
+    {
+        $subscription = $user->activeSubscription;
+        
+        if (!$subscription) {
+            return 0;
+        }
+
+        $plan = $subscription->subscription;
+        
+        if (!$plan) {
+            return 0;
+        }
+
+        // Unlimited plan
+        if ($plan->max_content_generations == -1) {
+            return -1; // Indicates unlimited
+        }
+
+        $monthlyUsage = $user->getMonthlyGenerationsCount();
+        $maxAllowed = $plan->max_content_generations;
+
+        return max(0, $maxAllowed - $monthlyUsage);
     }
 
     /**
