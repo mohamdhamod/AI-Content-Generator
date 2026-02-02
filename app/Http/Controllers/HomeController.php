@@ -67,7 +67,7 @@ class HomeController extends Controller
                 $userData = [
                     'active_subscription' => $user->activeSubscription,
                     'credits_available' => $this->calculateAvailableCredits($user),
-                    'total_generated' => $user->generatedContents()->count(),
+                    'total_generated' => $user->contentGenerations()->count(),
                 ];
                 
                 // Debug: Log the credits value
