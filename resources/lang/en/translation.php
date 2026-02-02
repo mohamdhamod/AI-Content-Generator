@@ -275,7 +275,7 @@ return [
         // Hero Section
         'welcome_badge_guest' => 'Get 5 Free Credits When You Sign Up!',
         'welcome_badge_auth' => ':credits Credits Available',
-        'welcome_title' => 'Welcome to Medical AI',
+        'welcome_title' => 'Welcome to ',
         'welcome_title_highlight' => 'AI Medical Content',
         'welcome_subtitle' => 'Generate professional medical content in seconds using advanced AI technology. Perfect for healthcare professionals, clinics, and medical marketers.',
         'start_generating' => 'Start Generating',

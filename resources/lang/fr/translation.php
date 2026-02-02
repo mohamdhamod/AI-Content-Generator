@@ -275,7 +275,7 @@ return [
         // Hero Section
         'welcome_badge_guest' => 'Obtenez 5 crédits gratuits lors de votre inscription !',
         'welcome_badge_auth' => ':credits crédits disponibles',
-        'welcome_title' => 'Bienvenue dans Medical AI',
+        'welcome_title' => 'Bienvenue dans ',
         'welcome_title_highlight' => 'Contenu Médical IA',
         'welcome_subtitle' => 'Générez du contenu médical professionnel en quelques secondes grâce à la technologie IA avancée. Parfait pour les professionnels de santé, les cliniques et les marketeurs médicaux.',
         'start_generating' => 'Commencer à générer',
