@@ -86,6 +86,9 @@ import './phone-input.js';
 // Bundle Bootstrap Icons locally to ensure fonts are available
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
+// Bundle Font Awesome locally
+import '@fortawesome/fontawesome-free/css/all.min.css';
+
 // EasyMDE styles (used by the SimpleMDE-compatible editor)
 import 'easymde/dist/easymde.min.css';
 

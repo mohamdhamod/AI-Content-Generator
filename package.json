@@ -15,6 +15,7 @@
         "vite": "^7.1.1"
     },
     "dependencies": {
+        "@fortawesome/fontawesome-free": "^7.1.0",
         "@popperjs/core": "^2.11.8",
         "animate.css": "^4.1.1",
         "aos": "^2.3.4",
@@ -33,6 +34,7 @@
         "datatables.net-buttons-bs4": "^3.2.4",
         "datatables.net-buttons-bs5": "^3.2.5",
         "datatables.net-fixedheader": "^4.0.3",
+        "easymde": "^2.20.0",
         "flag-icons": "^7.5.0",
         "flatpickr": "^4.6.13",
         "intl-tel-input": "^24.7.0",
@@ -50,7 +52,6 @@
         "resolve-url-loader": "^5.0.0",
         "sass": "^1.90.0",
         "sass-loader": "^16.0.5",
-        "easymde": "^2.20.0",
         "stream-browserify": "^3.0.0",
         "sweetalert2": "^11.26.3",
         "swiper": "^11.2.10",
