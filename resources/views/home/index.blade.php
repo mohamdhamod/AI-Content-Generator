@@ -233,8 +233,8 @@
         <div class="col-md-4">
             <div class="card border-0 shadow-sm h-100">
                 <div class="card-body text-center p-2">
-                    <div class="bg-primary bg-opacity-15 rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style="width:45px;height:45px;">
-                        <i class="bi bi-1-circle-fill text-primary fs-4"></i>
+                    <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style="width:50px;height:50px;">
+                        <i class="bi bi-1-circle-fill text-primary fs-3"></i>
                     </div>
                     <h6 class="fw-bold mb-2">{{ __('translation.home.step_1_title') }}</h6>
                     <p class="text-muted small mb-0">{{ __('translation.home.step_1_description') }}</p>
@@ -245,8 +245,8 @@
         <div class="col-md-4">
             <div class="card border-0 shadow-sm h-100">
                 <div class="card-body text-center p-2">
-                    <div class="bg-success bg-opacity-15 rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style="width:45px;height:45px;">
-                        <i class="bi bi-2-circle-fill text-success fs-4"></i>
+                    <div class="bg-success bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style="width:50px;height:50px;">
+                        <i class="bi bi-2-circle-fill text-success fs-3"></i>
                     </div>
                     <h6 class="fw-bold mb-2">{{ __('translation.home.step_2_title') }}</h6>
                     <p class="text-muted small mb-0">{{ __('translation.home.step_2_description') }}</p>
@@ -257,8 +257,8 @@
         <div class="col-md-4">
             <div class="card border-0 shadow-sm h-100">
                 <div class="card-body text-center p-2">
-                    <div class="bg-info bg-opacity-15 rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style="width:45px;height:45px;">
-                        <i class="bi bi-3-circle-fill text-info fs-4"></i>
+                    <div class="bg-info bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style="width:50px;height:50px;">
+                        <i class="bi bi-3-circle-fill text-info fs-3"></i>
                     </div>
                     <h6 class="fw-bold mb-2">{{ __('translation.home.step_3_title') }}</h6>
                     <p class="text-muted small mb-0">{{ __('translation.home.step_3_description') }}</p>

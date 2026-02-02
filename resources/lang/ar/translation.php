@@ -26,6 +26,7 @@ return [
         'warning' => 'تحذير',
         'confirm' => 'تأكيد',
         'file_name' => 'اسم الملف',
+        'topics' => 'موضوع',
     ],
 
     'export' => [

@@ -26,6 +26,7 @@ return [
         'warning' => 'Warnung',
         'confirm' => 'Bestätigen',
         'file_name' => 'Dateiname',
+        'topics' => 'Themen',
     ],
 
     'export' => [
