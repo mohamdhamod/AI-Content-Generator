@@ -63,4 +63,15 @@ return [
         'temperature' => (float) env('OPENAI_TEMPERATURE', 0.7),
     ],
 
+    'gemini' => [
+        'api_key' => env('GEMINI_API_KEY'),
+        'model' => env('GEMINI_MODEL', 'gemini-2.0-flash'),
+        'base_url' => env('GEMINI_BASE_URL', 'https://generativelanguage.googleapis.com/v1beta'),
+        'max_tokens' => (int) env('GEMINI_MAX_TOKENS', 2000),
+        'temperature' => (float) env('GEMINI_TEMPERATURE', 0.7),
+    ],
+
+    // AI Provider: 'openai' or 'gemini'
+    'ai_provider' => env('AI_PROVIDER', 'openai'),
+
 ];

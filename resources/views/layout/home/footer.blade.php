@@ -65,7 +65,6 @@
 					<ul class="list-unstyled mb-0 small">
 						<li><a class="text-decoration-none text-muted hover-primary" href="{{ route('home') }}">{{ __('translation.layout.home.nav_home') }}</a></li>
 						<li><a class="text-decoration-none text-muted hover-primary" href="{{ route('about-us.index') }}">{{ __('translation.layout.home.footer.about') }}</a></li>
-						<li><a class="text-decoration-none text-muted hover-primary" href="{{ route('about-us.index') }}#contact-us">{{ __('translation.layout.home.footer.contact') }}</a></li>
 					</ul>
 				</div>
 				<div class="col-md-3">

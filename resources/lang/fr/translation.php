@@ -269,6 +269,9 @@ return [
         'new_here' => 'Nouveau ici ?',
         'country' => 'Pays',
         'select_country' => 'Sélectionner le pays',
+        'specialties' => 'Spécialités médicales',
+        'select_specialties' => 'Sélectionnez vos spécialités',
+        'specialties_hint' => 'Sélectionnez une ou plusieurs spécialités médicales avec lesquelles vous travaillez. Celles-ci seront affichées dans le générateur de contenu.',
     ],
 
     'home' => [
@@ -334,6 +337,7 @@ return [
         'credits_text' => 'crédits',
         'available' => 'disponible',
         'view_history' => 'Voir l\'historique',
+        'view_full_content' => 'Voir le contenu complet',
         
         // Stats
         'stat_specialties' => 'Spécialités',
@@ -1611,6 +1615,7 @@ return [
         'copy' => 'Copier',
         'download' => 'Télécharger',
         'view' => 'Voir',
+        'view_full_content' => 'Voir le contenu complet',
         'delete' => 'Supprimer',
         'copied_success' => 'Contenu copié dans le presse-papiers !',
         'confirm_delete_title' => 'Êtes-vous sûr ?',
@@ -1905,7 +1910,8 @@ return [
         'no_history' => 'Pas d\'historique de contenu',
         'no_history_message' => 'Vous n\'avez pas encore généré de contenu. Commencez par créer votre premier contenu.',
 
-        'disclaimer' => 'Ce contenu est à des fins éducatives uniquement et ne remplace pas une consultation médicale professionnelle.',
+        'disclaimer' => 'Ce contenu est à des fins éducatives uniquement et ne remplace pas une consultation médicale professionnelle. Consultez toujours un professionnel de la santé qualifié pour obtenir des conseils médicaux, un diagnostic ou un traitement.',
+        'disclaimer_label' => 'Avertissement',
 
         // Chat Interface
         'chat' => [

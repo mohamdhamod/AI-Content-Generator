@@ -1543,7 +1543,8 @@ return [
         'no_history' => 'Sin historial de contenido',
         'no_history_message' => 'Aún no ha generado ningún contenido. Comience creando su primera pieza de contenido.',
 
-        'disclaimer' => 'Este contenido es solo para fines educativos y no reemplaza la consulta médica profesional.',
+        'disclaimer' => 'Este contenido es solo para fines educativos y no reemplaza la consulta médica profesional. Siempre consulte con un proveedor de atención médica calificado para obtener consejos médicos, diagnóstico o tratamiento.',
+        'disclaimer_label' => 'Aviso legal',
 
         // Chat Interface
         'chat' => [

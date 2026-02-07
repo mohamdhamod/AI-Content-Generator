@@ -58,8 +58,11 @@ class GuardrailService
 
     /**
      * Filter and validate generated content.
+     * 
+     * @param string $content The content to filter
+     * @param string $locale The locale/language code for the disclaimer (default: 'en')
      */
-    public function filter(string $content): array
+    public function filter(string $content, string $locale = 'en'): array
     {
         $issues = [];
         $cleanContent = $content;
@@ -88,7 +91,7 @@ class GuardrailService
                 $issues[] = "Missing required element: '{$name}'";
                 // Append disclaimer if missing
                 if ($name === 'disclaimer') {
-                    $cleanContent = $this->appendDisclaimer($cleanContent);
+                    $cleanContent = $this->appendDisclaimer($cleanContent, $locale);
                 }
             }
         }
@@ -167,10 +170,25 @@ class GuardrailService
 
     /**
      * Append disclaimer to content.
+     * 
+     * @param string $content The content to append disclaimer to
+     * @param string $locale The locale/language code for the disclaimer
      */
-    protected function appendDisclaimer(string $content): string
+    protected function appendDisclaimer(string $content, string $locale = 'en'): string
     {
-        $disclaimer = "\n\n---\n*Disclaimer: This content is for educational purposes only and does not replace professional medical consultation. Always consult with a qualified healthcare provider for medical advice, diagnosis, or treatment.*";
+        // Get translated disclaimer
+        $disclaimerLabel = __('translation.content_generator.disclaimer_label', [], $locale);
+        $disclaimerText = __('translation.content_generator.disclaimer', [], $locale);
+        
+        // Fallback if translation doesn't exist
+        if ($disclaimerLabel === 'translation.content_generator.disclaimer_label') {
+            $disclaimerLabel = 'Disclaimer';
+        }
+        if ($disclaimerText === 'translation.content_generator.disclaimer') {
+            $disclaimerText = 'This content is for educational purposes only and does not replace professional medical consultation. Always consult with a qualified healthcare provider for medical advice, diagnosis, or treatment.';
+        }
+        
+        $disclaimer = "\n\n---\n*{$disclaimerLabel}: {$disclaimerText}*";
         
         return $content . $disclaimer;
     }

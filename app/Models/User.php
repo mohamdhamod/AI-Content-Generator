@@ -123,4 +123,29 @@ class User extends Authenticatable implements MustVerifyEmail
 
         return $monthlyUsage < $maxAllowed;
     }
+
+    /**
+     * Get user's selected specialties.
+     */
+    public function specialties()
+    {
+        return $this->belongsToMany(Specialty::class, 'user_specialties', 'user_id', 'specialty_id')
+            ->withTimestamps();
+    }
+
+    /**
+     * Sync user's specialties.
+     */
+    public function syncSpecialties(array $specialtyIds): void
+    {
+        $this->specialties()->sync($specialtyIds);
+    }
+
+    /**
+     * Check if user has any specialties selected.
+     */
+    public function hasSpecialties(): bool
+    {
+        return $this->specialties()->exists();
+    }
 }

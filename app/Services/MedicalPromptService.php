@@ -203,17 +203,17 @@ class MedicalPromptService
     protected function getContentTypeRequirements(string $contentType): string
     {
         $requirements = [
-            'patient_education' => 'Include: introduction, general information, wellness tips, when to see a doctor, disclaimer. Length: 400-600 words. Reading level: general public.',
-            'seo_blog_article' => 'Include: H2/H3 headings, meta description, focus keywords, engaging introduction, informational sections, CTA. Length: 800-1200 words.',
-            'social_media_post' => 'Include: engaging hook, educational tip/fact, relevant hashtags, CTA, emoji suggestions. Platform-appropriate length.',
-            'google_review_reply' => 'Include: thank you, acknowledgment of feedback, commitment to care. Length: 50-150 words. Maintain patient privacy.',
-            'email_follow_up' => 'Include: subject line, warm greeting, care reminder, general tips, appointment CTA, disclaimer. Length: 150-250 words.',
-            'website_faq' => 'Create 5-8 Q&A pairs. Each answer: 50-100 words. Informative but encourage professional consultation.',
-            'what_to_expect' => 'Describe: appointment flow, typical duration, preparation tips. Length: 300-500 words. Friendly, step-by-step format.',
+            'patient_education' => 'Include: introduction, general information, wellness tips, when to see a doctor, disclaimer. Length: 800-1200 words. Reading level: general public. Write comprehensive and detailed content.',
+            'seo_blog_article' => 'Include: H2/H3 headings, meta description, focus keywords, engaging introduction, informational sections, CTA. Length: 1500-2500 words. Write comprehensive and detailed content.',
+            'social_media_post' => 'Include: engaging hook, educational tip/fact, relevant hashtags, CTA, emoji suggestions. Length: 200-400 words.',
+            'google_review_reply' => 'Include: thank you, acknowledgment of feedback, commitment to care. Length: 100-200 words. Maintain patient privacy.',
+            'email_follow_up' => 'Include: subject line, warm greeting, care reminder, general tips, appointment CTA, disclaimer. Length: 300-500 words.',
+            'website_faq' => 'Create 8-12 Q&A pairs. Each answer: 100-200 words. Informative but encourage professional consultation.',
+            'what_to_expect' => 'Describe: appointment flow, typical duration, preparation tips. Length: 600-1000 words. Friendly, step-by-step format.',
             'university_lecture' => $this->getUniversityLectureRequirements(),
         ];
         
-        return $requirements[$contentType] ?? 'Create informative, patient-friendly educational content.';
+        return $requirements[$contentType] ?? 'Create comprehensive, detailed, patient-friendly educational content. Length: 800-1200 words.';
     }
     
     /**

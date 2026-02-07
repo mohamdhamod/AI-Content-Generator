@@ -12,16 +12,15 @@ use Illuminate\Support\Facades\Log;
 
 class ContentGeneratorService
 {
-    protected OpenAIService $openAI;
+    protected OpenAIService|GeminiService $aiService;
     protected MedicalPromptService $promptService;
     protected GuardrailService $guardrail;
 
     public function __construct(
-        OpenAIService $openAI,
         MedicalPromptService $promptService,
         GuardrailService $guardrail
     ) {
-        $this->openAI = $openAI;
+        $this->aiService = AIServiceFactory::create();
         $this->promptService = $promptService;
         $this->guardrail = $guardrail;
     }
@@ -44,8 +43,8 @@ class ContentGeneratorService
         array $inputData,
         string $locale = 'en'
     ): array {
-        // Check if OpenAI is configured
-        if (!$this->openAI->isConfigured()) {
+        // Check if AI service is configured
+        if (!$this->aiService->isConfigured()) {
             return [
                 'success' => false,
                 'error' => 'AI service is not configured. Please contact administrator.',
@@ -108,7 +107,7 @@ class ContentGeneratorService
         }
 
         // Generate content with AI
-        $aiResponse = $this->openAI->chat(
+        $aiResponse = $this->aiService->chat(
             $systemPrompt,
             $userPrompt,
             [
@@ -141,18 +140,18 @@ class ContentGeneratorService
         }
 
         // Filter content through guardrails
-        $filtered = $this->guardrail->filter($aiResponse['content']);
+        $filtered = $this->guardrail->filter($aiResponse['content'], $locale);
 
         if ($filtered['needs_regeneration']) {
             // Try regeneration once
-            $aiResponse = $this->openAI->chat(
+            $aiResponse = $this->aiService->chat(
                 $systemPrompt . "\n\nIMPORTANT: Do not include any diagnostic language, prescriptions, or specific medical advice.",
                 $userPrompt,
                 ['max_tokens' => $this->getMaxTokens($inputData)]
             );
 
             if ($aiResponse['success']) {
-                $filtered = $this->guardrail->filter($aiResponse['content']);
+                $filtered = $this->guardrail->filter($aiResponse['content'], $locale);
             }
         }
 
@@ -234,9 +233,9 @@ class ContentGeneratorService
      */
     protected function getMaxTokens(array $inputData): int
     {
-        $wordCount = $inputData['word_count'] ?? 500;
+        $wordCount = $inputData['word_count'] ?? 1500;
         // Approximate: 1 token ≈ 0.75 words, add buffer
-        return min(4000, (int) ($wordCount * 1.5));
+        return min(8000, (int) ($wordCount * 2));
     }
 
     /**

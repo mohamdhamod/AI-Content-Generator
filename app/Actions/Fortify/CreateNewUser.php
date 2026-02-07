@@ -32,6 +32,8 @@ class CreateNewUser implements CreatesNewUsers
             'term_and_policy' => ['required', 'accepted'],
             'phone' => ['nullable', 'string', 'max:20'],
             'country_id' => ['required', 'integer', 'exists:countries,id'],
+            'specialty_ids' => ['required', 'array', 'min:1'],
+            'specialty_ids.*' => ['integer', 'exists:specialties,id'],
         ]);
 
         $validator->validate();
@@ -82,6 +84,11 @@ class CreateNewUser implements CreatesNewUsers
                 'locale_auto_detected' => false,
             ]);
             $user->assignRole(RoleEnum::SUBSCRIBER);
+
+            // Sync user specialties
+            if (!empty($input['specialty_ids']) && is_array($input['specialty_ids'])) {
+                $user->syncSpecialties($input['specialty_ids']);
+            }
 
             DB::table('registration_links')
                 ->where('email', $email)

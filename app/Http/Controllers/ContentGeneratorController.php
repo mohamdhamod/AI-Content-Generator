@@ -42,11 +42,21 @@ class ContentGeneratorController extends Controller
     {
         $user = Auth::user();
         
+        // Get user's selected specialty IDs
+        $userSpecialtyIds = $user->specialties()->pluck('specialties.id')->toArray();
+        
         // Load specialties with their active topics
-        $specialties = Specialty::active()
+        // If user has selected specialties, only show those
+        // If user has no specialties, show all active specialties
+        $specialtiesQuery = Specialty::active()
             ->ordered()
-            ->with(['activeTopics.translations'])
-            ->get();
+            ->with(['activeTopics.translations']);
+            
+        if (!empty($userSpecialtyIds)) {
+            $specialtiesQuery->whereIn('id', $userSpecialtyIds);
+        }
+        
+        $specialties = $specialtiesQuery->get();
             
         $contentTypes = ContentType::active()->ordered()->get();
         
@@ -63,6 +73,7 @@ class ContentGeneratorController extends Controller
             'user' => $user,
             'languages' => $this->getSupportedLanguages(),
             'tones' => $this->getSupportedTones(),
+            'hasUserSpecialties' => !empty($userSpecialtyIds),
         ]);
     }
     
@@ -210,6 +221,34 @@ class ContentGeneratorController extends Controller
     }
 
     /**
+     * Get recent content history for AJAX sidebar update.
+     */
+    public function recentHistory(Request $request)
+    {
+        $user = Auth::user();
+        $recentContents = $this->contentService->getUserHistory($user, 10);
+        
+        $html = '';
+        foreach ($recentContents as $content) {
+            $url = route('content.show', $content->id);
+            $title = \Illuminate\Support\Str::limit($content->input_data['topic'] ?? $content->specialty->name ?? 'Content', 35);
+            $html .= '<a href="' . e($url) . '" class="d-block text-decoration-none py-2 px-3 rounded chat-history-item">';
+            $html .= '<div class="chat-history-text">' . e($title) . '</div>';
+            $html .= '</a>';
+        }
+        
+        if (empty($html)) {
+            $html = '<div class="py-2 px-3"><p class="mb-0 text-secondary small">' . __('translation.content_generator.chat.no_recent_content') . '</p></div>';
+        }
+        
+        return response()->json([
+            'success' => true,
+            'html' => $html,
+            'count' => $recentContents->count(),
+        ]);
+    }
+
+    /**
      * Show content history.
      */
     public function history(Request $request)
@@ -251,7 +290,13 @@ class ContentGeneratorController extends Controller
 
         $contents = $query->orderBy('created_at', 'desc')->paginate(15);
 
-        $specialties = Specialty::active()->ordered()->get();
+        // Filter specialties by user's selected specialties
+        $userSpecialtyIds = $user->specialties()->pluck('specialties.id')->toArray();
+        if (!empty($userSpecialtyIds)) {
+            $specialties = Specialty::active()->ordered()->whereIn('id', $userSpecialtyIds)->get();
+        } else {
+            $specialties = Specialty::active()->ordered()->get();
+        }
         $contentTypes = ContentType::active()->ordered()->get();
 
         // Return JSON for AJAX requests
@@ -485,7 +530,13 @@ class ContentGeneratorController extends Controller
             ->with(['specialty', 'contentType', 'topic'])
             ->paginate(15);
 
-        $specialties = Specialty::active()->ordered()->get();
+        // Filter specialties by user's selected specialties
+        $userSpecialtyIds = $user->specialties()->pluck('specialties.id')->toArray();
+        if (!empty($userSpecialtyIds)) {
+            $specialties = Specialty::active()->ordered()->whereIn('id', $userSpecialtyIds)->get();
+        } else {
+            $specialties = Specialty::active()->ordered()->get();
+        }
         $contentTypes = ContentType::active()->ordered()->get();
 
         return view('content-generator.favorites', [

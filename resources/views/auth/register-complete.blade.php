@@ -82,6 +82,26 @@
                                     @enderror
                                 </div>
 
+                                <div class="mb-3">
+                                    <label for="specialty_ids" class="form-label">
+                                        {{ __('translation.auth.specialties') }} <span class="text-danger">*</span>
+                                    </label>
+                                    <select id="specialty_ids" name="specialty_ids[]" class="form-select select2" multiple required>
+                                        @foreach(\App\Models\Specialty::active()->ordered()->get() as $specialty)
+                                            <option value="{{ $specialty->id }}" 
+                                                    data-icon="{{ $specialty->icon ?? 'fa-stethoscope' }}"
+                                                    data-color="{{ $specialty->color ?? '#4A90D9' }}"
+                                                    {{ in_array($specialty->id, old('specialty_ids', [])) ? 'selected' : '' }}>
+                                                {{ $specialty->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <div class="form-text">{{ __('translation.auth.specialties_hint') }}</div>
+                                    @error('specialty_ids')
+                                    <span class="invalid-feedback d-block"><strong>{{ $message }}</strong></span>
+                                    @enderror
+                                </div>
+
                                 <div class="mb-4">
                                     <div class="form-check">
                                         <input type="checkbox" id="term_and_policy" name="term_and_policy" class="form-check-input fs-16" value="1" required>
@@ -133,36 +153,5 @@
             try { if (window.bindPasswordToggle) bindPasswordToggle(); } catch(e) { console.error(e); }
             try { if (window.handleSubmit) handleSubmit('#formRegisterComplete'); } catch(e) { console.error(e); }
             
-            // Initialize Select2 for country dropdown with flags
-            if (typeof $.fn.select2 !== 'undefined') {
-                $('#country_id').select2({
-                    placeholder: '{{ __('translation.auth.select_country') }}',
-                    allowClear: false,
-                    width: '100%',
-                    templateResult: formatCountryOption,
-                    templateSelection: formatCountryOption
-                });
-            }
-        });
-
-        // Format country option with flag
-        function formatCountryOption(country) {
-            if (!country.id) {
-                return country.text;
-            }
-            
-            var flagUrl = $(country.element).data('flag');
-            if (!flagUrl) {
-                return country.text;
-            }
-            
-            var $country = $(
-                '<span style="display: flex; align-items: center;">' +
-                '<img src="' + flagUrl + '" class="img-flag" style="width: 20px; height: 15px; margin-right: 8px; object-fit: cover; border: 1px solid #ddd;" onerror="this.style.display=\'none\'" /> ' +
-                '<span>' + country.text + '</span>' +
-                '</span>'
-            );
-            return $country;
-        }
-    </script>
+        });    </script>
 @endpush

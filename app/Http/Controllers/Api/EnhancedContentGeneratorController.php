@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Topic;
 use App\Services\MedicalPromptService;
+use App\Services\AIServiceFactory;
 use App\Services\OpenAIService;
+use App\Services\GeminiService;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 
@@ -18,14 +20,13 @@ use Illuminate\Http\JsonResponse;
 class EnhancedContentGeneratorController extends Controller
 {
     protected MedicalPromptService $promptService;
-    protected OpenAIService $openAIService;
+    protected OpenAIService|GeminiService $aiService;
     
     public function __construct(
-        MedicalPromptService $promptService,
-        OpenAIService $openAIService
+        MedicalPromptService $promptService
     ) {
         $this->promptService = $promptService;
-        $this->openAIService = $openAIService;
+        $this->aiService = AIServiceFactory::create();
     }
     
     /**
@@ -66,13 +67,20 @@ class EnhancedContentGeneratorController extends Controller
                 $validated['variables'] ?? []
             );
             
-            // Generate content using OpenAI
-            $messages = [
-                ['role' => 'system', 'content' => $promptData['system_prompt']],
-                ['role' => 'user', 'content' => $promptData['user_prompt']]
-            ];
+            // Generate content using AI Service
+            $aiResponse = $this->aiService->chat(
+                $promptData['system_prompt'],
+                $promptData['user_prompt']
+            );
             
-            $generatedContent = $this->openAIService->chat($messages);
+            if (!$aiResponse['success']) {
+                return response()->json([
+                    'success' => false,
+                    'error' => 'Failed to generate content: ' . $aiResponse['error'],
+                ], 500);
+            }
+            
+            $generatedContent = $aiResponse['content'];
             
             // Validate content against medical rules
             $validation = $this->promptService->validateContent($generatedContent);

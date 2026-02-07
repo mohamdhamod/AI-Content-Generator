@@ -75,7 +75,8 @@
                             @foreach($contentTypes ?? [] as $type)
                                 <div class="content-type-item" 
                                      data-type-id="{{ $type->id }}"
-                                     data-type-slug="{{ $type->slug }}">
+                                     data-type-slug="{{ $type->slug }}"
+                                     data-prompt="{{ $type->prompt_template ?? __('translation.content_generator.chat.generate_prompt', ['type' => $type->name]) }}">
                                     <div class="type-icon">
                                         <i class="fas {{ $type->icon ?? 'fa-file-alt' }}"></i>
                                     </div>
@@ -91,7 +92,7 @@
                             <i class="fas fa-history"></i>
                             {{ __('translation.content_generator.chat.recent') }}
                         </h6>
-                        <div class="history-list" style="display: block !important; visibility: visible !important;">
+                        <div class="history-list" id="recentHistoryList" style="display: block !important; visibility: visible !important;">
                             @forelse($recentContents ?? [] as $content)
                                 <a href="{{ route('content.show', $content->id) }}" 
                                    class="d-block text-decoration-none py-2 px-3 rounded chat-history-item">
@@ -284,7 +285,9 @@
             <h6>{{ __('translation.content_generator.type') }}</h6>
             <div class="content-type-grid mobile">
                 @foreach($contentTypes ?? [] as $type)
-                    <div class="content-type-item" data-type-id="{{ $type->id }}">
+                    <div class="content-type-item" 
+                         data-type-id="{{ $type->id }}"
+                         data-prompt="{{ $type->prompt_template ?? __('translation.content_generator.chat.generate_prompt', ['type' => $type->name]) }}">
                         <i class="fas {{ $type->icon ?? 'fa-file-alt' }}"></i>
                         <span>{{ $type->name }}</span>
                     </div>
@@ -431,6 +434,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Sync mobile/desktop
             const typeId = this.dataset.typeId;
+            const prompt = this.dataset.prompt;
             document.querySelectorAll(`.content-type-item[data-type-id="${typeId}"]`).forEach(i => i.classList.add('active'));
             
             selectedContentType = {
@@ -439,6 +443,14 @@ document.addEventListener('DOMContentLoaded', function() {
             };
             contentTypeInput.value = selectedContentType.id;
             updateSelectedOptions();
+            
+            // Set prompt if available
+            if (prompt) {
+                promptInput.value = prompt;
+                promptInput.dispatchEvent(new Event('input'));
+            }
+            
+            promptInput.focus();
             
             // Close mobile sidebar if open
             const offcanvas = bootstrap.Offcanvas.getInstance(document.getElementById('mobileSidebar'));
@@ -580,7 +592,19 @@ document.addEventListener('DOMContentLoaded', function() {
         try {
             const data = await ApiClient.post('{{ route("content.generate") }}', formData);
             removeTyping(typingId);
-            addMessage(data.success ? data.content : (data.message || translations.error), data.success ? 'assistant' : 'assistant', !data.success);
+            
+            if (data.success && data.content_id) {
+                // Add content with link to full page
+                const contentUrl = `{{ url(app()->getLocale() . '/generate/result') }}/${data.content_id}`;
+                const contentWithLink = data.content + 
+                    `<div class="mt-3 pt-3 border-top"><a href="${contentUrl}" class="btn btn-primary btn-sm"><i class="fas fa-external-link-alt me-1"></i>{{ __('translation.content_generator.view_full_content') }}</a></div>`;
+                addMessage(contentWithLink, 'assistant', false);
+                
+                // Refresh recent history in sidebar
+                refreshRecentHistory();
+            } else {
+                addMessage(data.message || translations.error, 'assistant', true);
+            }
         } catch (error) {
             removeTyping(typingId);
             addMessage(translations.connectionError, 'assistant', true);
@@ -662,6 +686,31 @@ document.addEventListener('DOMContentLoaded', function() {
             chatForm.dispatchEvent(new Event('submit'));
         }
     });
+
+    // Refresh recent history in sidebar via AJAX
+    async function refreshRecentHistory() {
+        try {
+            const data = await ApiClient.get('{{ route("content.recent") }}');
+            if (data.success && data.html) {
+                const historyList = document.getElementById('recentHistoryList');
+                if (historyList) {
+                    historyList.innerHTML = data.html;
+                }
+            }
+        } catch (error) {
+            console.error('Failed to refresh recent history:', error);
+        }
+    }
+
+    // Auto-select first specialty if user has specialties
+    @if(isset($specialties) && $specialties->count() > 0)
+    (function autoSelectFirstSpecialty() {
+        const firstSpecialtyBtn = document.querySelector('.specialty-btn');
+        if (firstSpecialtyBtn) {
+            firstSpecialtyBtn.click();
+        }
+    })();
+    @endif
 });
 </script>
 @endsection

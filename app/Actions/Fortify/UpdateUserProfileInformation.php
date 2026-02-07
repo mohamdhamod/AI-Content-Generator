@@ -34,6 +34,8 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
             ],
 
             'image'       => ['nullable' , 'file', 'max:4076', 'mimes:jpg,jpeg,png'],
+            'specialty_ids' => ['required', 'array', 'min:1'],
+            'specialty_ids.*' => ['integer', 'exists:specialties,id'],
             ])->validateWithBag('updateProfileInformation');
 
         $image = $this->processImage($input['image'] ?? null, $user->image);
@@ -50,6 +52,11 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
             $this->updateVerifiedUser($user, $input);
         } else {
             $user->forceFill($data)->save();
+        }
+
+        // Sync user specialties
+        if (!empty($input['specialty_ids']) && is_array($input['specialty_ids'])) {
+            $user->syncSpecialties($input['specialty_ids']);
         }
 
     }

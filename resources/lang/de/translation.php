@@ -1903,7 +1903,8 @@ return [
         'no_history' => 'Keine Inhaltshistorie',
         'no_history_message' => 'Sie haben noch keine Inhalte generiert. Beginnen Sie mit der Erstellung Ihres ersten Inhalts.',
 
-        'disclaimer' => 'Dieser Inhalt dient nur zu Bildungszwecken und ersetzt keine professionelle medizinische Beratung.',
+        'disclaimer' => 'Dieser Inhalt dient nur zu Bildungszwecken und ersetzt keine professionelle medizinische Beratung. Konsultieren Sie immer einen qualifizierten Gesundheitsdienstleister für medizinische Beratung, Diagnose oder Behandlung.',
+        'disclaimer_label' => 'Haftungsausschluss',
 
         // Chat Interface
         'chat' => [

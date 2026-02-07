@@ -78,6 +78,7 @@ Route::middleware(['auth', 'verified', 'subscription.active'])->prefix('generate
     Route::get('/', [Controllers\ContentGeneratorController::class, 'index'])->name('index');
     Route::post('/generate', [Controllers\ContentGeneratorController::class, 'generate'])->middleware('throttle:content-generation')->name('generate');
     Route::get('/history', [Controllers\ContentGeneratorController::class, 'history'])->name('history');
+    Route::get('/recent', [Controllers\ContentGeneratorController::class, 'recentHistory'])->name('recent');
     Route::get('/favorites', [Controllers\ContentGeneratorController::class, 'favorites'])->name('favorites');
     Route::get('/result/{id}', [Controllers\ContentGeneratorController::class, 'show'])->name('show');
     Route::delete('/history/{id}', [Controllers\ContentGeneratorController::class, 'destroy'])->name('destroy');

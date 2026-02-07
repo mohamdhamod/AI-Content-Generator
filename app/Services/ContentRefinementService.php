@@ -8,6 +8,13 @@ use Illuminate\Support\Facades\Log;
 
 class ContentRefinementService
 {
+    protected OpenAIService|GeminiService $aiService;
+
+    public function __construct()
+    {
+        $this->aiService = AIServiceFactory::create();
+    }
+
     /**
      * Available refinement actions
      */
@@ -190,46 +197,30 @@ PROMPT;
     }
 
     /**
-     * Call OpenAI API for refinement
+     * Call AI Service for refinement
      */
     protected function callOpenAI(string $prompt, array $options): string
     {
-        $apiKey = config('services.openai.api_key');
-        
-        if (empty($apiKey)) {
-            throw new \Exception('OpenAI API key not configured');
+        if (!$this->aiService->isConfigured()) {
+            throw new \Exception('AI service is not configured');
         }
 
         try {
-            $response = Http::withHeaders([
-                'Authorization' => 'Bearer ' . $apiKey,
-                'Content-Type' => 'application/json',
-            ])->timeout(120)->post('https://api.openai.com/v1/chat/completions', [
-                'model' => config('services.openai.model', 'gpt-4-turbo-preview'),
-                'messages' => [
-                    [
-                        'role' => 'system',
-                        'content' => 'You are a professional medical content refinement assistant. Always maintain medical accuracy while improving content quality.',
-                    ],
-                    [
-                        'role' => 'user',
-                        'content' => $prompt,
-                    ],
-                ],
+            $systemPrompt = 'You are a professional medical content refinement assistant. Always maintain medical accuracy while improving content quality.';
+            
+            $response = $this->aiService->chat($systemPrompt, $prompt, [
                 'temperature' => 0.7,
                 'max_tokens' => 4000,
             ]);
 
-            if (!$response->successful()) {
-                Log::error('OpenAI API Error', [
-                    'status' => $response->status(),
-                    'body' => $response->body(),
+            if (!$response['success']) {
+                Log::error('AI API Error', [
+                    'error' => $response['error'],
                 ]);
-                throw new \Exception('Failed to refine content with AI');
+                throw new \Exception('Failed to refine content with AI: ' . $response['error']);
             }
 
-            $data = $response->json();
-            $refinedText = $data['choices'][0]['message']['content'] ?? '';
+            $refinedText = $response['content'] ?? '';
 
             if (empty($refinedText)) {
                 throw new \Exception('Empty response from AI refinement');
