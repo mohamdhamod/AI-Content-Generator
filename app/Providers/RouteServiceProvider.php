@@ -17,7 +17,7 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @var string
      */
-    public const HOME = '/';
+    public const HOME = '/en/generate';
     const ADMIN_PAGE = '/en/dashboard';
 
     /**
@@ -31,7 +31,7 @@ class RouteServiceProvider extends ServiceProvider
             // Build supported locales regex from config/languages.php
             $availableLocales = implode('|', array_keys(config('languages', [])));
             if (empty($availableLocales)) {
-                $availableLocales = 'en|ar|fr|es';
+                $availableLocales = 'en|ar|fr|es|de';
             }
 
             // API routes (without locale prefix, for external apps)
