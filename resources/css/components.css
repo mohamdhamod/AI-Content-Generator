@@ -4422,20 +4422,28 @@ html[data-bs-theme=dark] .btn-soft-dark, html[data-bs-theme=dark] .btn-ghost-dar
 .mobile-section .form-select,
 .mobile-section .choices,
 #filtersRow .form-select,
-#filtersRow .choices {
+#filtersRow .choices,
+.auth-box .form-select,
+.auth-box .choices,
+#formProfile .form-select,
+#formProfile .choices {
     font-size: 0.8125rem; /* 13px - compact but readable */
 }
 
 /* Compact Choices.js Wrapper for Sidebar */
 .sidebar-section .choices,
 .mobile-section .choices,
-#filtersRow .choices {
+#filtersRow .choices,
+.auth-box .choices,
+#formProfile .choices {
     box-shadow: none !important;
 }
 
 .sidebar-section .choices__inner,
 .mobile-section .choices__inner,
-#filtersRow .choices__inner {
+#filtersRow .choices__inner,
+.auth-box .choices__inner,
+#formProfile .choices__inner {
     padding: 0.375rem 0.625rem !important;
     min-height: 36px;
     font-size: 0.8125rem;
@@ -4447,20 +4455,26 @@ html[data-bs-theme=dark] .btn-soft-dark, html[data-bs-theme=dark] .btn-ghost-dar
 
 .sidebar-section .choices__inner:hover,
 .mobile-section .choices__inner:hover,
-#filtersRow .choices__inner:hover {
+#filtersRow .choices__inner:hover,
+.auth-box .choices__inner:hover,
+#formProfile .choices__inner:hover {
     border-color: var(--ins-dark-border-subtle);
 }
 
 /* Compact Single Value Display */
 .sidebar-section .choices__list--single,
 .mobile-section .choices__list--single,
-#filtersRow .choices__list--single {
+#filtersRow .choices__list--single,
+.auth-box .choices__list--single,
+#formProfile .choices__list--single {
     padding: 0 !important;
 }
 
 .sidebar-section .choices__list--single .choices__item,
 .mobile-section .choices__list--single .choices__item,
-#filtersRow .choices__list--single .choices__item {
+#filtersRow .choices__list--single .choices__item,
+.auth-box .choices__list--single .choices__item,
+#formProfile .choices__list--single .choices__item {
     font-size: 0.8125rem;
     line-height: 1.4;
 }
@@ -4468,7 +4482,9 @@ html[data-bs-theme=dark] .btn-soft-dark, html[data-bs-theme=dark] .btn-ghost-dar
 /* Compact Input Search */
 .sidebar-section .choices[data-type*=select-one] .choices__input,
 .mobile-section .choices[data-type*=select-one] .choices__input,
-#filtersRow .choices[data-type*=select-one] .choices__input {
+#filtersRow .choices[data-type*=select-one] .choices__input,
+.auth-box .choices[data-type*=select-one] .choices__input,
+#formProfile .choices[data-type*=select-one] .choices__input {
     padding: 0.3rem 0.5rem !important;
     font-size: 0.8125rem;
     margin-bottom: 6px;
@@ -4477,7 +4493,9 @@ html[data-bs-theme=dark] .btn-soft-dark, html[data-bs-theme=dark] .btn-ghost-dar
 /* Compact Dropdown Arrow */
 .sidebar-section .choices[data-type*=select-one]:after,
 .mobile-section .choices[data-type*=select-one]:after,
-#filtersRow .choices[data-type*=select-one]:after {
+#filtersRow .choices[data-type*=select-one]:after,
+.auth-box .choices[data-type*=select-one]:after,
+#formProfile .choices[data-type*=select-one]:after {
     height: 10px;
     width: 10px;
     top: 50%;
@@ -4487,7 +4505,9 @@ html[data-bs-theme=dark] .btn-soft-dark, html[data-bs-theme=dark] .btn-ghost-dar
 /* Compact Dropdown Items */
 .sidebar-section .choices__list--dropdown .choices__item,
 .mobile-section .choices__list--dropdown .choices__item,
-#filtersRow .choices__list--dropdown .choices__item {
+#filtersRow .choices__list--dropdown .choices__item,
+.auth-box .choices__list--dropdown .choices__item,
+#formProfile .choices__list--dropdown .choices__item {
     font-size: 0.8125rem !important;
     padding: 0.35rem 0.75rem !important;
 }
@@ -4495,14 +4515,18 @@ html[data-bs-theme=dark] .btn-soft-dark, html[data-bs-theme=dark] .btn-ghost-dar
 /* Compact Dropdown Container */
 .sidebar-section .choices__list--dropdown,
 .mobile-section .choices__list--dropdown,
-#filtersRow .choices__list--dropdown {
+#filtersRow .choices__list--dropdown,
+.auth-box .choices__list--dropdown,
+#formProfile .choices__list--dropdown {
     padding: 6px 6px 12px;
     border-radius: var(--ins-border-radius-sm);
 }
 
 .sidebar-section .choices__list--dropdown .choices__list,
 .mobile-section .choices__list--dropdown .choices__list,
-#filtersRow .choices__list--dropdown .choices__list {
+#filtersRow .choices__list--dropdown .choices__list,
+.auth-box .choices__list--dropdown .choices__list,
+#formProfile .choices__list--dropdown .choices__list {
     max-height: 200px;
     margin: 0 -6px -10px;
 }
@@ -4513,7 +4537,11 @@ html[data-bs-theme=dark] .btn-soft-dark, html[data-bs-theme=dark] .btn-ghost-dar
 .mobile-section .is-focused .choices__inner,
 .mobile-section .is-open .choices__inner,
 #filtersRow .is-focused .choices__inner,
-#filtersRow .is-open .choices__inner {
+#filtersRow .is-open .choices__inner,
+.auth-box .is-focused .choices__inner,
+.auth-box .is-open .choices__inner,
+#formProfile .is-focused .choices__inner,
+#formProfile .is-open .choices__inner {
     border-color: var(--ins-primary);
     box-shadow: 0 0 0 2px rgba(var(--ins-primary-rgb), 0.15);
 }
@@ -4521,7 +4549,9 @@ html[data-bs-theme=dark] .btn-soft-dark, html[data-bs-theme=dark] .btn-ghost-dar
 /* Native Select Compact Styling (Fallback) */
 .sidebar-section .form-select:not(.select2),
 .mobile-section .form-select:not(.select2),
-#filtersRow .form-select:not(.select2) {
+#filtersRow .form-select:not(.select2),
+.auth-box .form-select:not(.select2),
+#formProfile .form-select:not(.select2) {
     padding: 0.375rem 2rem 0.375rem 0.625rem;
     font-size: 0.8125rem;
     min-height: 36px;
@@ -4533,7 +4563,9 @@ html[data-bs-theme=dark] .btn-soft-dark, html[data-bs-theme=dark] .btn-ghost-dar
 
 .sidebar-section .form-select:not(.select2):focus,
 .mobile-section .form-select:not(.select2):focus,
-#filtersRow .form-select:not(.select2):focus {
+#filtersRow .form-select:not(.select2):focus,
+.auth-box .form-select:not(.select2):focus,
+#formProfile .form-select:not(.select2):focus {
     border-color: var(--ins-primary);
     box-shadow: 0 0 0 2px rgba(var(--ins-primary-rgb), 0.15);
 }
@@ -4541,7 +4573,9 @@ html[data-bs-theme=dark] .btn-soft-dark, html[data-bs-theme=dark] .btn-ghost-dar
 /* Placeholder Styling */
 .sidebar-section .choices__placeholder,
 .mobile-section .choices__placeholder,
-#filtersRow .choices__placeholder {
+#filtersRow .choices__placeholder,
+.auth-box .choices__placeholder,
+#formProfile .choices__placeholder {
     font-size: 0.8125rem;
     color: var(--ins-secondary-color);
     opacity: 0.8;
@@ -4550,14 +4584,18 @@ html[data-bs-theme=dark] .btn-soft-dark, html[data-bs-theme=dark] .btn-ghost-dar
 /* RTL Support */
 html[dir="rtl"] .sidebar-section .choices[data-type*=select-one]:after,
 html[dir="rtl"] .mobile-section .choices[data-type*=select-one]:after,
-html[dir="rtl"] #filtersRow .choices[data-type*=select-one]:after {
+html[dir="rtl"] #filtersRow .choices[data-type*=select-one]:after,
+html[dir="rtl"] .auth-box .choices[data-type*=select-one]:after,
+html[dir="rtl"] #formProfile .choices[data-type*=select-one]:after {
     right: auto;
     left: 10px;
 }
 
 html[dir="rtl"] .sidebar-section .form-select:not(.select2),
 html[dir="rtl"] .mobile-section .form-select:not(.select2),
-html[dir="rtl"] #filtersRow .form-select:not(.select2) {
+html[dir="rtl"] #filtersRow .form-select:not(.select2),
+html[dir="rtl"] .auth-box .form-select:not(.select2),
+html[dir="rtl"] #formProfile .form-select:not(.select2) {
     padding: 0.375rem 0.625rem 0.375rem 2rem;
     background-position: left 0.5rem center;
 }
@@ -4568,21 +4606,29 @@ html[dir="rtl"] #filtersRow .form-select:not(.select2) {
 .mobile-section .choices,
 .mobile-section .form-select,
 #filtersRow .choices,
-#filtersRow .form-select {
+#filtersRow .form-select,
+.auth-box .choices,
+.auth-box .form-select,
+#formProfile .choices,
+#formProfile .form-select {
     transition: all 0.2s ease;
 }
 
 /* Hover Enhancement */
 .sidebar-section .choices:hover .choices__inner,
 .mobile-section .choices:hover .choices__inner,
-#filtersRow .choices:hover .choices__inner {
+#filtersRow .choices:hover .choices__inner,
+.auth-box .choices:hover .choices__inner,
+#formProfile .choices:hover .choices__inner {
     border-color: var(--ins-dark-border-subtle);
 }
 
 /* Selected Item Highlight in Dropdown */
 .sidebar-section .choices__list--dropdown .choices__item--selectable.is-highlighted,
 .mobile-section .choices__list--dropdown .choices__item--selectable.is-highlighted,
-#filtersRow .choices__list--dropdown .choices__item--selectable.is-highlighted {
+#filtersRow .choices__list--dropdown .choices__item--selectable.is-highlighted,
+.auth-box .choices__list--dropdown .choices__item--selectable.is-highlighted,
+#formProfile .choices__list--dropdown .choices__item--selectable.is-highlighted {
     background-color: rgba(var(--ins-primary-rgb), 0.08) !important;
     color: var(--ins-primary);
 }
@@ -4590,9 +4636,67 @@ html[dir="rtl"] #filtersRow .form-select:not(.select2) {
 /* No Results Styling */
 .sidebar-section .choices__list--dropdown .has-no-results,
 .mobile-section .choices__list--dropdown .has-no-results,
-#filtersRow .choices__list--dropdown .has-no-results {
+#filtersRow .choices__list--dropdown .has-no-results,
+.auth-box .choices__list--dropdown .has-no-results,
+#formProfile .choices__list--dropdown .has-no-results {
     font-size: 0.8125rem;
     padding: 0.5rem 0.75rem;
+}
+
+/* ===== Multi-Select Compact Styling (Auth Forms) ===== */
+.auth-box .choices[data-type*=select-multiple] .choices__inner,
+#formProfile .choices[data-type*=select-multiple] .choices__inner {
+    padding: 0.25rem 0.5rem !important;
+    min-height: 36px;
+}
+
+.auth-box .choices[data-type*=select-multiple] .choices__list--multiple,
+#formProfile .choices[data-type*=select-multiple] .choices__list--multiple {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+}
+
+.auth-box .choices[data-type*=select-multiple] .choices__item,
+#formProfile .choices[data-type*=select-multiple] .choices__item {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: var(--ins-border-radius-pill);
+    margin: 0;
+}
+
+.auth-box .choices[data-type*=select-multiple] .choices__button,
+#formProfile .choices[data-type*=select-multiple] .choices__button {
+    padding: 0 0.25rem;
+    margin-left: 0.25rem;
+    font-size: 0.65rem;
+}
+
+.auth-box .choices[data-type*=select-multiple] .choices__input,
+#formProfile .choices[data-type*=select-multiple] .choices__input {
+    font-size: 0.8125rem;
+    padding: 0.2rem 0 !important;
+    min-width: 80px;
+}
+
+/* Multi-Select Dropdown List Items */
+.auth-box .choices[data-type*=select-multiple] .choices__list--dropdown .choices__item,
+#formProfile .choices[data-type*=select-multiple] .choices__list--dropdown .choices__item {
+    font-size: 0.8125rem !important;
+    padding: 0.4rem 0.75rem !important;
+}
+
+.auth-box .choices[data-type*=select-multiple] .choices__list--dropdown .choices__item--selectable.is-highlighted,
+#formProfile .choices[data-type*=select-multiple] .choices__list--dropdown .choices__item--selectable.is-highlighted {
+    background-color: rgba(var(--ins-primary-rgb), 0.08) !important;
+    color: var(--ins-primary);
+}
+
+/* RTL Support for Multi-Select */
+html[dir="rtl"] .auth-box .choices[data-type*=select-multiple] .choices__button,
+html[dir="rtl"] #formProfile .choices[data-type*=select-multiple] .choices__button {
+    margin-left: 0;
+    margin-right: 0.25rem;
 }
 
 /* ===== Sidebar Instructions Card ===== */
