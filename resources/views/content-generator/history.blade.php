@@ -21,7 +21,7 @@
             <div class="row g-3 align-items-end" id="filtersRow">
                 <div class="col-md-4">
                     <label class="form-label small text-muted">{{ __('translation.content_generator.filter.content_type') }}</label>
-                    <select name="content_type" id="filterContentType" class="form-select form-select-sm filter-select">
+                    <select name="content_type" id="filterContentType" class="form-select select2 filter-select" data-placeholder="{{ __('translation.content_generator.filter.all_types') }}">
                         <option value="">{{ __('translation.content_generator.filter.all_types') }}</option>
                         @foreach($contentTypes as $type)
                         <option value="{{ $type->slug }}" {{ request('content_type') == $type->slug ? 'selected' : '' }}>{{ $type->name }}</option>
@@ -30,7 +30,7 @@
                 </div>
                 <div class="col-md-4">
                     <label class="form-label small text-muted">{{ __('translation.content_generator.filter.specialty') }}</label>
-                    <select name="specialty" id="filterSpecialty" class="form-select form-select-sm filter-select">
+                    <select name="specialty" id="filterSpecialty" class="form-select select2 filter-select" data-placeholder="{{ __('translation.content_generator.filter.all_specialties') }}">
                         <option value="">{{ __('translation.content_generator.filter.all_specialties') }}</option>
                         @foreach($specialties as $specialty)
                         <option value="{{ $specialty->slug }}" {{ request('specialty') == $specialty->slug ? 'selected' : '' }}>{{ $specialty->name }}</option>
@@ -39,7 +39,7 @@
                 </div>
                 <div class="col-md-4">
                     <label class="form-label small text-muted">{{ __('translation.content_generator.filter.status') }}</label>
-                    <select name="status" id="filterStatus" class="form-select form-select-sm filter-select">
+                    <select name="status" id="filterStatus" class="form-select select2 filter-select" data-placeholder="{{ __('translation.content_generator.filter.all_statuses') }}">
                         <option value="">{{ __('translation.content_generator.filter.all_statuses') }}</option>
                         <option value="completed" {{ request('status') == 'completed' ? 'selected' : '' }}>{{ __('translation.content_generator.status.completed') }}</option>
                         <option value="failed" {{ request('status') == 'failed' ? 'selected' : '' }}>{{ __('translation.content_generator.status.failed') }}</option>

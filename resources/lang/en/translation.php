@@ -218,6 +218,7 @@ return [
         'email_already_registered' => 'This email is already registered. Please sign in.',
         'footer_credit' => '© :year :app — by :author',
         'logout' => 'Logout',
+        'login_success' => 'Login successful! Redirecting...',
         'remember_me' => 'Remember Me',
         'forgot_password' => 'Forgot Password?',
         'sign_in_button' => 'Sign In',
@@ -1923,10 +1924,12 @@ return [
             
             // Welcome Screen
             'welcome_title' => 'Welcome, Dr.',
-            'welcome_message' => 'Choose a content type to get started, or select a specialty for more specific content.',
+            'welcome_message' => 'Create professional medical content with AI assistance',
             'choose_content_type' => 'What would you like to create?',
             'popular_specialties' => 'Quick Access Specialties',
             'generate_prompt' => 'Generate :type content',
+            'sidebar_hint_title' => 'Use the Sidebar to Get Started',
+            'sidebar_hint_message' => 'Select your options from the sidebar on the left to customize your content:',
             
             // Input
             'input_placeholder' => 'Describe the medical content you want to create...',
@@ -1935,8 +1938,12 @@ return [
             'recent' => 'Recent',
             'no_recent_content' => 'No recent content',
             
-            // Topics
+            // Selectors
+            'select_specialty' => 'Select Specialty',
             'select_topic' => 'Select Topic',
+            'select_content_type' => 'Select Content Type',
+            
+            // Topics
             'no_topics' => 'No topics available',
             'no_topics_for_specialty' => 'No topics available for this specialty',
             'topics_hint' => 'Select a topic to help generate more specific content',
@@ -2144,7 +2151,7 @@ return [
         'clinical_documentation' => 'Clinical Documentation',
         'research_studies' => 'Research & Studies',
         'healthcare_marketing' => 'Healthcare Marketing',
-        'social_media' => 'Social Media',
+        'template_category_social_media' => 'Social Media',
         'include_in_template' => 'Include in Template',
         'content_structure' => 'Content structure (headings, sections)',
         'tone_style_settings' => 'Tone and style settings',

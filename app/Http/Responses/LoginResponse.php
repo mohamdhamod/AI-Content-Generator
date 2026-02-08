@@ -25,9 +25,20 @@ class LoginResponse implements LoginResponseContract
         $locale = app()->getLocale();
 
         if (auth()->user()->hasRole(RoleEnum::ADMIN)) {
-            return redirect()->intended(route('dashboard', ['locale' => $locale]));
+            $redirectUrl = route('dashboard', ['locale' => $locale]);
+        } else {
+            $redirectUrl = route('home', ['locale' => $locale]);
         }
 
-        return redirect()->intended(route('home', ['locale' => $locale]));
+        // For AJAX requests, return JSON with redirect URL
+        if ($request->expectsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => __('translation.auth.login_success'),
+                'redirect' => $redirectUrl
+            ]);
+        }
+
+        return redirect()->intended($redirectUrl);
     }
 }

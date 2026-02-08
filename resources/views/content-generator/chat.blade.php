@@ -56,9 +56,10 @@
                             <i class="fas fa-tags"></i>
                             {{ __('translation.content_generator.topics') }}
                         </h6>
-                        <div class="topics-list" id="topicsList">
-                            {{-- Topics will be loaded dynamically --}}
-                        </div>
+                        <select id="topicSelect" class="form-select select2" data-placeholder="{{ __('translation.content_generator.chat.select_topic') }}">
+                            <option value="">{{ __('translation.content_generator.chat.select_topic') }}</option>
+                            {{-- Topics will be loaded dynamically via JavaScript --}}
+                        </select>
                         <small class="text-muted d-block mt-2">
                             <i class="fas fa-info-circle me-1"></i>
                             {{ __('translation.content_generator.chat.topics_hint') }}
@@ -71,19 +72,17 @@
                             <i class="fas fa-file-medical"></i>
                             {{ __('translation.content_generator.type') }}
                         </h6>
-                        <div class="content-type-grid">
+                        <select id="contentTypeSelect" class="form-select select2" data-placeholder="{{ __('translation.content_generator.chat.select_content_type') }}">
+                            <option value="">{{ __('translation.content_generator.chat.select_content_type') }}</option>
                             @foreach($contentTypes ?? [] as $type)
-                                <div class="content-type-item" 
-                                     data-type-id="{{ $type->id }}"
-                                     data-type-slug="{{ $type->slug }}"
-                                     data-prompt="{{ $type->prompt_template ?? __('translation.content_generator.chat.generate_prompt', ['type' => $type->name]) }}">
-                                    <div class="type-icon">
-                                        <i class="fas {{ $type->icon ?? 'fa-file-alt' }}"></i>
-                                    </div>
-                                    <span class="type-name">{{ $type->name }}</span>
-                                </div>
+                                <option value="{{ $type->id }}" 
+                                        data-type-slug="{{ $type->slug }}"
+                                        data-icon="{{ $type->icon ?? 'fa-file-alt' }}"
+                                        data-prompt="{{ $type->prompt_template ?? __('translation.content_generator.chat.generate_prompt', ['type' => $type->name]) }}">
+                                    {{ $type->name }}
+                                </option>
                             @endforeach
-                        </div>
+                        </select>
                     </div>
 
                     {{-- Recent History --}}
@@ -146,52 +145,23 @@
                             <h2>{{ __('translation.content_generator.chat.welcome_title') }} {{ $user->name ?? __('translation.common.user') }}</h2>
                             <p>{{ __('translation.content_generator.chat.welcome_message') }}</p>
                             
-                            {{-- Quick Start: Content Types from Database --}}
-                            <div class="quick-start-section">
-                                <h6 class="quick-start-label">
-                                    <i class="fas fa-lightbulb"></i>
-                                    {{ __('translation.content_generator.chat.choose_content_type') }}
-                                </h6>
-                                <div class="quick-start">
-                                    @foreach($contentTypes ?? [] as $type)
-                                        <div class="quick-card" 
-                                             data-type-id="{{ $type->id }}"
-                                             data-prompt="{{ $type->prompt_template ?? __('translation.content_generator.chat.generate_prompt', ['type' => $type->name]) }}">
-                                            <i class="fas {{ $type->icon ?? 'fa-file-alt' }}"></i>
-                                            <span>{{ $type->name }}</span>
-                                            @if($type->description)
-                                                <small class="type-description">{{ Str::limit($type->description, 50) }}</small>
-                                            @endif
-                                        </div>
-                                    @endforeach
+                            {{-- Sidebar Instructions --}}
+                            <div class="sidebar-instructions">
+                                <div class="instruction-card">
+                                    <div class="instruction-icon">
+                                        <i class="fas fa-hand-pointer"></i>
+                                    </div>
+                                    <div class="instruction-content">
+                                        <h6>{{ __('translation.content_generator.chat.sidebar_hint_title') }}</h6>
+                                        <p>{{ __('translation.content_generator.chat.sidebar_hint_message') }}</p>
+                                        <ul class="instruction-steps">
+                                            <li><i class="fas fa-stethoscope text-primary"></i> {{ __('translation.content_generator.specialty') }}</li>
+                                            <li><i class="fas fa-tags text-info"></i> {{ __('translation.content_generator.topics') }}</li>
+                                            <li><i class="fas fa-file-medical text-success"></i> {{ __('translation.content_generator.type') }}</li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
-
-                            {{-- Popular Specialties Quick Access --}}
-                            @if(isset($specialties) && $specialties->count() > 0)
-                            <div class="quick-start-section mt-4">
-                                <h6 class="quick-start-label">
-                                    <i class="fas fa-stethoscope"></i>
-                                    {{ __('translation.content_generator.chat.popular_specialties') }}
-                                </h6>
-                                <div class="specialty-quick-list">
-                                    @foreach($specialties->take(6) as $specialty)
-                                        <button type="button" 
-                                                class="specialty-quick-btn"
-                                                data-specialty-id="{{ $specialty->id }}"
-                                                data-specialty-slug="{{ $specialty->slug ?? $specialty->key }}"
-                                                data-topics='@json($specialty->activeTopics->map(fn($t) => ["id" => $t->id, "name" => $t->name, "icon" => $t->icon]))'>
-                                            @if($specialty->icon)
-                                                <i class="fas {{ $specialty->icon }}" style="color: {{ $specialty->color ?? 'var(--ins-primary)' }}"></i>
-                                            @else
-                                                <i class="fas fa-heartbeat" style="color: var(--ins-primary)"></i>
-                                            @endif
-                                            <span>{{ $specialty->name }}</span>
-                                        </button>
-                                    @endforeach
-                                </div>
-                            </div>
-                            @endif
                         </div>
 
                         {{-- Messages Container --}}
@@ -275,24 +245,26 @@
         {{-- Mobile Topics Section --}}
         <div class="mobile-section" id="mobileTopicsSection" style="display: none;">
             <h6>{{ __('translation.content_generator.topics') }}</h6>
-            <div class="topics-list" id="mobileTopicsList">
+            <select id="mobileTopicSelect" class="form-select select2" data-placeholder="{{ __('translation.content_generator.chat.select_topic') }}">
+                <option value="">{{ __('translation.content_generator.chat.select_topic') }}</option>
                 {{-- Topics will be loaded dynamically --}}
-            </div>
+            </select>
         </div>
 
         {{-- Content Types --}}
         <div class="mobile-section">
             <h6>{{ __('translation.content_generator.type') }}</h6>
-            <div class="content-type-grid mobile">
+            <select id="mobileContentTypeSelect" class="form-select select2" data-placeholder="{{ __('translation.content_generator.chat.select_content_type') }}">
+                <option value="">{{ __('translation.content_generator.chat.select_content_type') }}</option>
                 @foreach($contentTypes ?? [] as $type)
-                    <div class="content-type-item" 
-                         data-type-id="{{ $type->id }}"
-                         data-prompt="{{ $type->prompt_template ?? __('translation.content_generator.chat.generate_prompt', ['type' => $type->name]) }}">
-                        <i class="fas {{ $type->icon ?? 'fa-file-alt' }}"></i>
-                        <span>{{ $type->name }}</span>
-                    </div>
+                    <option value="{{ $type->id }}" 
+                            data-type-slug="{{ $type->slug }}"
+                            data-icon="{{ $type->icon ?? 'fa-file-alt' }}"
+                            data-prompt="{{ $type->prompt_template ?? __('translation.content_generator.chat.generate_prompt', ['type' => $type->name]) }}">
+                        {{ $type->name }}
+                    </option>
                 @endforeach
-            </div>
+            </select>
         </div>
     </div>
 </div>
@@ -311,9 +283,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const contentTypeInput = document.getElementById('contentTypeInput');
     const newChatBtn = document.getElementById('newChatBtn');
     const topicsSection = document.getElementById('topicsSection');
-    const topicsList = document.getElementById('topicsList');
     const mobileTopicsSection = document.getElementById('mobileTopicsSection');
-    const mobileTopicsList = document.getElementById('mobileTopicsList');
+
+    // Topic and Content Type selects (dropdowns)
+    const topicSelect = document.getElementById('topicSelect');
+    const contentTypeSelect = document.getElementById('contentTypeSelect');
+    const mobileTopicSelect = document.getElementById('mobileTopicSelect');
+    const mobileContentTypeSelect = document.getElementById('mobileContentTypeSelect');
 
     let selectedSpecialty = null;
     let selectedTopic = null;
@@ -333,7 +309,19 @@ document.addEventListener('DOMContentLoaded', function() {
         this.style.height = Math.min(this.scrollHeight, 120) + 'px';
     });
 
-    // Specialty selection - handles both desktop and mobile
+    // Helper: Sync select values between desktop and mobile
+    function syncSelectValue(desktopSelect, mobileSelect, value) {
+        if (desktopSelect) desktopSelect.value = value;
+        if (mobileSelect) mobileSelect.value = value;
+        // Update Choices.js if initialized
+        [desktopSelect, mobileSelect].forEach(sel => {
+            if (sel && sel._choices) {
+                sel._choices.setChoiceByValue(value);
+            }
+        });
+    }
+
+    // Specialty selection - handles both desktop and mobile (BUTTONS)
     document.querySelectorAll('.specialty-btn').forEach(btn => {
         btn.addEventListener('click', function() {
             // Remove active from all specialty buttons
@@ -354,6 +342,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Clear selected topic when specialty changes
             selectedTopic = null;
             topicInput.value = '';
+            syncSelectValue(topicSelect, mobileTopicSelect, '');
             
             // Load and display topics from data attribute
             const topicsData = JSON.parse(this.dataset.topics || '[]');
@@ -367,96 +356,132 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Display topics in both desktop and mobile views
+    // Display topics in both desktop and mobile selects (DROPDOWNS)
     function displayTopics(topics) {
-        // Clear existing topics
-        topicsList.innerHTML = '';
-        mobileTopicsList.innerHTML = '';
+        // Clear existing topics (keep first placeholder option)
+        [topicSelect, mobileTopicSelect].forEach(select => {
+            if (select) {
+                while (select.options.length > 1) {
+                    select.remove(1);
+                }
+            }
+        });
         
         if (topics.length === 0) {
-            const noTopicsHtml = `<p class="empty-state text-muted">${translations.noTopics}</p>`;
-            topicsList.innerHTML = noTopicsHtml;
-            mobileTopicsList.innerHTML = noTopicsHtml;
-            topicsSection.style.display = 'block';
-            mobileTopicsSection.style.display = 'block';
+            topicsSection.style.display = 'none';
+            mobileTopicsSection.style.display = 'none';
             return;
         }
         
+        // Add topic options
         topics.forEach(topic => {
-            const topicHtml = `
-                <button type="button" class="topic-btn" data-topic-id="${topic.id}" data-topic-name="${topic.name}">
-                    ${topic.icon ? `<i class="fas ${topic.icon} me-1"></i>` : '<i class="fas fa-tag me-1"></i>'}
-                    ${topic.name}
-                </button>
-            `;
-            topicsList.insertAdjacentHTML('beforeend', topicHtml);
-            mobileTopicsList.insertAdjacentHTML('beforeend', topicHtml);
+            const option = document.createElement('option');
+            option.value = topic.id;
+            option.textContent = topic.name;
+            option.dataset.topicName = topic.name;
+            option.dataset.icon = topic.icon || 'fa-tag';
+            
+            if (topicSelect) topicSelect.appendChild(option.cloneNode(true));
+            if (mobileTopicSelect) mobileTopicSelect.appendChild(option);
         });
         
         // Show topics sections
         topicsSection.style.display = 'block';
         mobileTopicsSection.style.display = 'block';
         
-        // Attach event listeners to new topic buttons
-        attachTopicListeners();
-    }
-
-    // Attach click listeners to topic buttons
-    function attachTopicListeners() {
-        document.querySelectorAll('.topic-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                // Remove active from all topic buttons
-                document.querySelectorAll('.topic-btn').forEach(b => b.classList.remove('active'));
-                
-                // Mark this topic and its twin (mobile/desktop) as active
-                const topicId = this.dataset.topicId;
-                document.querySelectorAll(`.topic-btn[data-topic-id="${topicId}"]`).forEach(b => b.classList.add('active'));
-                
-                selectedTopic = {
-                    id: topicId,
-                    name: this.dataset.topicName
-                };
-                topicInput.value = selectedTopic.id;
-                updateSelectedOptions();
-                
-                // Close mobile sidebar if open
-                const offcanvas = bootstrap.Offcanvas.getInstance(document.getElementById('mobileSidebar'));
-                if (offcanvas) offcanvas.hide();
-            });
+        // Refresh Choices.js if initialized
+        [topicSelect, mobileTopicSelect].forEach(sel => {
+            if (sel && sel._choices) {
+                sel._choices.destroy();
+                sel._choices = null;
+            }
         });
     }
 
-    // Content type selection
-    document.querySelectorAll('.content-type-item').forEach(item => {
-        item.addEventListener('click', function() {
-            document.querySelectorAll('.content-type-item').forEach(i => i.classList.remove('active'));
-            this.classList.add('active');
-            
-            // Sync mobile/desktop
-            const typeId = this.dataset.typeId;
-            const prompt = this.dataset.prompt;
-            document.querySelectorAll(`.content-type-item[data-type-id="${typeId}"]`).forEach(i => i.classList.add('active'));
-            
-            selectedContentType = {
-                id: typeId,
-                name: this.querySelector('.type-name, span').textContent.trim()
-            };
-            contentTypeInput.value = selectedContentType.id;
+    // Handle topic selection change (DROPDOWN)
+    function handleTopicChange(select) {
+        const selectedOption = select.options[select.selectedIndex];
+        const topicId = select.value;
+        
+        if (!topicId) {
+            selectedTopic = null;
+            topicInput.value = '';
+            syncSelectValue(topicSelect, mobileTopicSelect, '');
             updateSelectedOptions();
-            
-            // Set prompt if available
-            if (prompt) {
-                promptInput.value = prompt;
-                promptInput.dispatchEvent(new Event('input'));
-            }
-            
-            promptInput.focus();
-            
-            // Close mobile sidebar if open
+            return;
+        }
+        
+        // Sync the other select
+        syncSelectValue(topicSelect, mobileTopicSelect, topicId);
+        
+        selectedTopic = {
+            id: topicId,
+            name: selectedOption.dataset.topicName || selectedOption.textContent.trim()
+        };
+        topicInput.value = topicId;
+        updateSelectedOptions();
+    }
+
+    // Topic select change listeners
+    if (topicSelect) {
+        topicSelect.addEventListener('change', function() {
+            handleTopicChange(this);
+        });
+    }
+    if (mobileTopicSelect) {
+        mobileTopicSelect.addEventListener('change', function() {
+            handleTopicChange(this);
             const offcanvas = bootstrap.Offcanvas.getInstance(document.getElementById('mobileSidebar'));
             if (offcanvas) offcanvas.hide();
         });
-    });
+    }
+
+    // Handle content type selection change (DROPDOWN)
+    function handleContentTypeChange(select) {
+        const selectedOption = select.options[select.selectedIndex];
+        const typeId = select.value;
+        
+        if (!typeId) {
+            selectedContentType = null;
+            contentTypeInput.value = '';
+            syncSelectValue(contentTypeSelect, mobileContentTypeSelect, '');
+            updateSelectedOptions();
+            return;
+        }
+        
+        // Sync the other select
+        syncSelectValue(contentTypeSelect, mobileContentTypeSelect, typeId);
+        
+        selectedContentType = {
+            id: typeId,
+            name: selectedOption.textContent.trim()
+        };
+        contentTypeInput.value = typeId;
+        updateSelectedOptions();
+        
+        // Set prompt if available
+        const prompt = selectedOption.dataset.prompt;
+        if (prompt) {
+            promptInput.value = prompt;
+            promptInput.dispatchEvent(new Event('input'));
+        }
+        
+        promptInput.focus();
+    }
+
+    // Content type select change listeners
+    if (contentTypeSelect) {
+        contentTypeSelect.addEventListener('change', function() {
+            handleContentTypeChange(this);
+        });
+    }
+    if (mobileContentTypeSelect) {
+        mobileContentTypeSelect.addEventListener('change', function() {
+            handleContentTypeChange(this);
+            const offcanvas = bootstrap.Offcanvas.getInstance(document.getElementById('mobileSidebar'));
+            if (offcanvas) offcanvas.hide();
+        });
+    }
 
     // Update selected options display
     function updateSelectedOptions() {
@@ -487,17 +512,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 specialtyInput.value = '';
                 topicInput.value = '';
                 document.querySelectorAll('.specialty-btn').forEach(b => b.classList.remove('active'));
-                document.querySelectorAll('.topic-btn').forEach(b => b.classList.remove('active'));
+                syncSelectValue(topicSelect, mobileTopicSelect, '');
                 topicsSection.style.display = 'none';
                 mobileTopicsSection.style.display = 'none';
             } else if (tagType === 'topic') {
                 selectedTopic = null;
                 topicInput.value = '';
-                document.querySelectorAll('.topic-btn').forEach(b => b.classList.remove('active'));
+                syncSelectValue(topicSelect, mobileTopicSelect, '');
             } else {
                 selectedContentType = null;
                 contentTypeInput.value = '';
-                document.querySelectorAll('.content-type-item').forEach(i => i.classList.remove('active'));
+                syncSelectValue(contentTypeSelect, mobileContentTypeSelect, '');
             }
             updateSelectedOptions();
         };
@@ -519,10 +544,9 @@ document.addEventListener('DOMContentLoaded', function() {
             const typeId = this.dataset.typeId;
             const prompt = this.dataset.prompt;
             
-            // Select the content type in sidebar
+            // Select the content type in dropdown
             if (typeId) {
-                document.querySelectorAll('.content-type-item').forEach(i => i.classList.remove('active'));
-                document.querySelectorAll(`.content-type-item[data-type-id="${typeId}"]`).forEach(i => i.classList.add('active'));
+                syncSelectValue(contentTypeSelect, mobileContentTypeSelect, typeId);
                 
                 selectedContentType = {
                     id: typeId,
@@ -547,7 +571,7 @@ document.addEventListener('DOMContentLoaded', function() {
         btn.addEventListener('click', function() {
             const specId = this.dataset.specialtyId;
             
-            // Trigger the same logic as sidebar specialty buttons
+            // Select the specialty button in sidebar
             document.querySelectorAll('.specialty-btn').forEach(b => b.classList.remove('active'));
             document.querySelectorAll(`.specialty-btn[data-specialty-id="${specId}"]`).forEach(b => b.classList.add('active'));
             
@@ -561,6 +585,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Clear selected topic
             selectedTopic = null;
             topicInput.value = '';
+            syncSelectValue(topicSelect, mobileTopicSelect, '');
             
             // Load topics
             const topicsData = JSON.parse(this.dataset.topics || '[]');
@@ -676,7 +701,13 @@ document.addEventListener('DOMContentLoaded', function() {
         selectedOptions.innerHTML = '';
         topicsSection.style.display = 'none';
         mobileTopicsSection.style.display = 'none';
-        document.querySelectorAll('.specialty-btn, .topic-btn, .content-type-item').forEach(el => el.classList.remove('active'));
+        
+        // Reset specialty buttons
+        document.querySelectorAll('.specialty-btn').forEach(b => b.classList.remove('active'));
+        
+        // Reset topic and content type selects
+        syncSelectValue(topicSelect, mobileTopicSelect, '');
+        syncSelectValue(contentTypeSelect, mobileContentTypeSelect, '');
     });
 
     // Enter to send (Shift+Enter for new line)

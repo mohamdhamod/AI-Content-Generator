@@ -83,8 +83,8 @@ button, .btn, .nav-link, .dropdown-toggle {
 
 /* Ensure minimum touch target size */
 @media (pointer: coarse) {
-    button:not(.qty-btn),
-    .btn:not(.qty-btn),
+    button:not(.qty-btn):not(.specialty-btn),
+    .btn:not(.qty-btn):not(.specialty-btn),
     .nav-link,
     .dropdown-item,
     .list-group-item-action,
@@ -92,7 +92,7 @@ button, .btn, .nav-link, .dropdown-toggle {
     input[type="radio"],
     .form-check-input,
     a.clickable,
-    [role="button"]:not(.qty-btn) {
+    [role="button"]:not(.qty-btn):not(.specialty-btn) {
         min-height: var(--ux-touch-target-min);
         min-width: var(--ux-touch-target-min);
     }

@@ -35,7 +35,7 @@
                         <option value="clinical_documentation">{{ __('translation.content_generator.clinical_documentation') }}</option>
                         <option value="research">{{ __('translation.content_generator.research_studies') }}</option>
                         <option value="marketing">{{ __('translation.content_generator.healthcare_marketing') }}</option>
-                        <option value="social_media">{{ __('translation.content_generator.social_media') }}</option>
+                        <option value="social_media">{{ __('translation.content_generator.template_category_social_media') }}</option>
                     </select>
                 </div>
                 

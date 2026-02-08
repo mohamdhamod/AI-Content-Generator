@@ -102,9 +102,41 @@ class ContentGeneratorService
             $userPrompt = $prompts['user_prompt'];
         } else {
             // FALLBACK: Use simple prompt for non-topic based content
-            $systemPrompt = "You are a professional medical content writer. Create educational, patient-friendly content. Never diagnose, prescribe, or give medical advice.";
-            $userPrompt = "Create content about: " . ($inputData['topic'] ?? 'general health') . "\nLanguage: " . $locale;
+            $contentTypeModel = ContentType::find($contentTypeId);
+            $minWords = $contentTypeModel->min_word_count ?? 800;
+            $maxWords = $contentTypeModel->max_word_count ?? 1200;
+            $targetWords = $inputData['word_count'] ?? $maxWords;
+            
+            $systemPrompt = "You are a professional medical content writer. Create educational, patient-friendly content. Never diagnose, prescribe, or give medical advice. Always write comprehensive, detailed content.";
+            
+            $userPrompt = "Create {$contentTypeModel->name} content about: " . ($inputData['topic'] ?? 'general health');
+            $userPrompt .= "\nLanguage: " . ($inputData['language'] ?? $locale);
+            
+            if (!empty($inputData['tone'])) {
+                $userPrompt .= "\nTone: " . $inputData['tone'];
+            }
+            
+            if (!empty($inputData['additional_instructions'])) {
+                $userPrompt .= "\nAdditional instructions: " . $inputData['additional_instructions'];
+            }
+            
+            // Add word count requirements
+            $userPrompt .= "\n\n### IMPORTANT LENGTH REQUIREMENT:";
+            $userPrompt .= "\n- Target word count: approximately {$targetWords} words";
+            $userPrompt .= "\n- Minimum: {$minWords} words";
+            $userPrompt .= "\n- Maximum: {$maxWords} words";
+            $userPrompt .= "\n- Write comprehensive, detailed, well-structured content";
+            $userPrompt .= "\n- DO NOT write short or summarized content";
+            $userPrompt .= "\n- Include all necessary sections and details";
         }
+        
+        // Log prompt for debugging
+        Log::info('Content Generation Request', [
+            'content_type' => $contentTypeModel->key ?? 'unknown',
+            'word_count_requested' => $inputData['word_count'] ?? 'default',
+            'max_tokens' => $this->getMaxTokens($inputData),
+            'user_prompt_length' => strlen($userPrompt),
+        ]);
 
         // Generate content with AI
         $aiResponse = $this->aiService->chat(
@@ -233,9 +265,15 @@ class ContentGeneratorService
      */
     protected function getMaxTokens(array $inputData): int
     {
+        // Use word_count from input or default to 1500
         $wordCount = $inputData['word_count'] ?? 1500;
-        // Approximate: 1 token ≈ 0.75 words, add buffer
-        return min(8000, (int) ($wordCount * 2));
+        
+        // Approximate: 1 word ≈ 1.3 tokens for English, more for other languages
+        // Add 50% buffer to ensure complete content
+        $tokens = (int) ($wordCount * 2);
+        
+        // Return at least 4000 tokens, max 16000
+        return max(4000, min(16000, $tokens));
     }
 
     /**

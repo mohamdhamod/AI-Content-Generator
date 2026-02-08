@@ -147,6 +147,11 @@ class MedicalPromptService
         // Get content type configuration from database
         $contentTypeConfig = $this->getContentTypeConfig($contentType);
         
+        // Get word count from variables or content type defaults
+        $minWords = $contentTypeConfig['min_word_count'] ?? 800;
+        $maxWords = $contentTypeConfig['max_word_count'] ?? 1200;
+        $targetWordCount = $variables['word_count'] ?? $maxWords;
+        
         // Build basic prompt
         $prompt = "Create {$contentTypeConfig['description']} about '{$topic->name}' ";
         $prompt .= "for a {$topic->specialty->name} clinic. ";
@@ -165,10 +170,29 @@ class MedicalPromptService
             $prompt .= "Platform: {$variables['platform']}. ";
         }
         
+        // Add tone if specified
+        if (isset($variables['tone']) && !empty($variables['tone'])) {
+            $prompt .= "\nTone: {$variables['tone']}. ";
+        }
+        
+        // Add additional instructions if provided
+        if (isset($variables['additional_instructions']) && !empty($variables['additional_instructions'])) {
+            $prompt .= "\nAdditional instructions: {$variables['additional_instructions']}";
+        }
+        
         // Add content type specific requirements
         if (isset($contentTypeConfig['requirements'])) {
             $prompt .= "\n\nContent Requirements:\n" . $contentTypeConfig['requirements'];
         }
+        
+        // CRITICAL: Explicitly specify content length
+        $prompt .= "\n\n### IMPORTANT LENGTH REQUIREMENT:";
+        $prompt .= "\n- Target word count: approximately {$targetWordCount} words";
+        $prompt .= "\n- Minimum: {$minWords} words";
+        $prompt .= "\n- Maximum: {$maxWords} words";
+        $prompt .= "\n- Write comprehensive, detailed, well-structured content";
+        $prompt .= "\n- DO NOT write short or summarized content";
+        $prompt .= "\n- Include all necessary sections and details";
         
         return $prompt;
     }

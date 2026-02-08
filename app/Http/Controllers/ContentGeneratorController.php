@@ -157,12 +157,15 @@ class ContentGeneratorController extends Controller
             ? Topic::find($validated['topic_id']) 
             : null;
 
+        // Get content type word count defaults
+        $defaultWordCount = $contentType->max_word_count ?? 1200;
+        
         // Prepare input data
         $inputData = [
             'topic' => $validated['prompt'],
             'language' => $this->getLanguageName($validated['language']),
             'tone' => $validated['tone'] ?? 'professional and friendly',
-            'word_count' => $validated['word_count'] ?? 500,
+            'word_count' => $validated['word_count'] ?? $defaultWordCount,
             'target_audience' => $validated['target_audience'] ?? 'patients',
             'country' => $validated['country'] ?? null,
             'additional_instructions' => $validated['additional_instructions'] ?? '',

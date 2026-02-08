@@ -218,6 +218,7 @@ return [
         'email_already_registered' => 'هذا البريد الإلكتروني مسجل بالفعل. يرجى تسجيل الدخول.',
         'footer_credit' => '© :year :app — بواسطة :author',
         'logout' => 'تسجيل الخروج',
+        'login_success' => 'تم تسجيل الدخول بنجاح! جاري التوجيه...',
         'remember_me' => 'تذكرني',
         'forgot_password' => 'نسيت كلمة المرور؟',
         'sign_in_button' => 'تسجيل الدخول',
@@ -1923,10 +1924,12 @@ return [
             
             // Welcome Screen
             'welcome_title' => 'مرحباً، د.',
-            'welcome_message' => 'اختر نوع محتوى للبدء، أو حدد تخصصاً لمحتوى أكثر تحديداً.',
+            'welcome_message' => 'أنشئ محتوى طبي احترافي بمساعدة الذكاء الاصطناعي',
             'choose_content_type' => 'ماذا تريد إنشاء؟',
             'popular_specialties' => 'تخصصات سريعة الوصول',
             'generate_prompt' => 'إنشاء محتوى :type',
+            'sidebar_hint_title' => 'استخدم الشريط الجانبي للبدء',
+            'sidebar_hint_message' => 'حدد خياراتك من الشريط الجانبي لتخصيص المحتوى الخاص بك:',
             
             // Input
             'input_placeholder' => 'صف المحتوى الطبي الذي تريد إنشاءه...',
@@ -1935,8 +1938,12 @@ return [
             'recent' => 'الأخير',
             'no_recent_content' => 'لا يوجد محتوى حديث',
             
-            // Topics
+            // Selectors
+            'select_specialty' => 'اختر التخصص',
             'select_topic' => 'اختر موضوعاً',
+            'select_content_type' => 'اختر نوع المحتوى',
+            
+            // Topics
             'no_topics' => 'لا توجد موضوعات متاحة',
             'no_topics_for_specialty' => 'لا توجد موضوعات متاحة لهذا التخصص',
             'topics_hint' => 'اختر موضوعاً للمساعدة في إنشاء محتوى أكثر تحديداً',
@@ -2144,7 +2151,7 @@ return [
         'clinical_documentation' => 'توثيق سريري',
         'research_studies' => 'البحث والدراسات',
         'healthcare_marketing' => 'تسويق الرعاية الصحية',
-        'social_media' => 'وسائل التواصل الاجتماعي',
+        'template_category_social_media' => 'وسائل التواصل الاجتماعي',
         'include_in_template' => 'تضمين في القالب',
         'content_structure' => 'هيكل المحتوى (عناوين، أقسام)',
         'tone_style_settings' => 'إعدادات النبرة والأسلوب',
