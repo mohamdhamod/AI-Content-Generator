@@ -20,6 +20,9 @@ class ContentType extends Model implements TranslatableContract
         'sort_order',
         'credits_cost',
         'slug',
+        'prompt_requirements',
+        'min_word_count',
+        'max_word_count',
     ];
 
     protected $casts = [

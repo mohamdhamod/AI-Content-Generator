@@ -184,12 +184,25 @@ class MedicalPromptService
             ->first();
         
         if ($type) {
+            // Build requirements string including word count
+            $requirements = $type->prompt_requirements ?? '';
+            if ($type->min_word_count && $type->max_word_count) {
+                $requirements .= " Length: {$type->min_word_count}-{$type->max_word_count} words.";
+            }
+            
+            // Special handling for university_lecture
+            if ($contentType === 'university_lecture' && empty($type->prompt_requirements)) {
+                $requirements = $this->getUniversityLectureRequirements();
+            }
+            
             return [
                 'name' => $type->name,
                 'description' => $type->description ?? 'content',
                 'placeholder' => $type->placeholder ?? '',
-                'requirements' => $this->getContentTypeRequirements($contentType),
+                'requirements' => $requirements,
                 'credits_cost' => $type->credits_cost ?? 1,
+                'min_word_count' => $type->min_word_count ?? 500,
+                'max_word_count' => $type->max_word_count ?? 1200,
             ];
         }
         
@@ -198,22 +211,29 @@ class MedicalPromptService
     }
     
     /**
-     * Get specific requirements for each content type
+     * Get specific requirements for each content type from database
      */
     protected function getContentTypeRequirements(string $contentType): string
     {
-        $requirements = [
-            'patient_education' => 'Include: introduction, general information, wellness tips, when to see a doctor, disclaimer. Length: 800-1200 words. Reading level: general public. Write comprehensive and detailed content.',
-            'seo_blog_article' => 'Include: H2/H3 headings, meta description, focus keywords, engaging introduction, informational sections, CTA. Length: 1500-2500 words. Write comprehensive and detailed content.',
-            'social_media_post' => 'Include: engaging hook, educational tip/fact, relevant hashtags, CTA, emoji suggestions. Length: 200-400 words.',
-            'google_review_reply' => 'Include: thank you, acknowledgment of feedback, commitment to care. Length: 100-200 words. Maintain patient privacy.',
-            'email_follow_up' => 'Include: subject line, warm greeting, care reminder, general tips, appointment CTA, disclaimer. Length: 300-500 words.',
-            'website_faq' => 'Create 8-12 Q&A pairs. Each answer: 100-200 words. Informative but encourage professional consultation.',
-            'what_to_expect' => 'Describe: appointment flow, typical duration, preparation tips. Length: 600-1000 words. Friendly, step-by-step format.',
-            'university_lecture' => $this->getUniversityLectureRequirements(),
-        ];
+        // Get from content_types table
+        $type = \App\Models\ContentType::where('key', $contentType)
+            ->where('active', true)
+            ->first();
         
-        return $requirements[$contentType] ?? 'Create comprehensive, detailed, patient-friendly educational content. Length: 800-1200 words.';
+        if ($type && $type->prompt_requirements) {
+            $requirements = $type->prompt_requirements;
+            if ($type->min_word_count && $type->max_word_count) {
+                $requirements .= " Length: {$type->min_word_count}-{$type->max_word_count} words.";
+            }
+            return $requirements;
+        }
+        
+        // Special handling for university_lecture
+        if ($contentType === 'university_lecture') {
+            return $this->getUniversityLectureRequirements();
+        }
+        
+        return 'Create comprehensive, detailed, patient-friendly educational content. Length: 800-1200 words.';
     }
     
     /**
@@ -297,60 +317,31 @@ LECTURE;
     }
     
     
+    /**
+     * Fallback defaults when content type not found in database
+     * This is kept as emergency fallback only - content types should come from database
+     */
     protected function getDefaultContentTypeConfig(string $contentType): array
     {
-        $defaults = [
-            'patient_education' => [
-                'name' => 'Patient Education',
-                'description' => 'educational content for patients',
-                'requirements' => 'Include introduction, general information, wellness tips, when to see a doctor, and disclaimer. 400-600 words.',
-                'credits_cost' => 1,
-            ],
-            'seo_blog_article' => [
-                'name' => 'SEO Blog Article',
-                'description' => 'SEO-optimized blog article',
-                'requirements' => 'Include H2/H3 headings, meta description, focus keywords, engaging introduction, informational sections, and CTA. 800-1200 words.',
-                'credits_cost' => 2,
-            ],
-            'social_media_post' => [
-                'name' => 'Social Media Post',
-                'description' => 'engaging social media post',
-                'requirements' => 'Include hook, educational tip, relevant hashtags, CTA, and emoji suggestions. Platform-appropriate length.',
-                'credits_cost' => 1,
-            ],
-            'google_review_reply' => [
-                'name' => 'Google Review Reply',
-                'description' => 'professional Google review response',
-                'requirements' => 'Thank reviewer, acknowledge feedback, show commitment to care. 50-150 words. Maintain privacy.',
-                'credits_cost' => 1,
-            ],
-            'email_follow_up' => [
-                'name' => 'Follow-up Email',
-                'description' => 'patient follow-up email',
-                'requirements' => 'Include subject line, warm greeting, care reminder, general tips, appointment CTA. 150-250 words.',
-                'credits_cost' => 1,
-            ],
-            'website_faq' => [
-                'name' => 'Website FAQ',
-                'description' => 'FAQ content',
-                'requirements' => 'Create 5-8 Q&A pairs. Each answer 50-100 words. Informative but encourage professional consultation.',
-                'credits_cost' => 1,
-            ],
-            'what_to_expect' => [
-                'name' => 'What to Expect Guide',
-                'description' => 'patient visit guide',
-                'requirements' => 'Describe appointment flow, duration, preparation tips. 300-500 words. Friendly, step-by-step format.',
-                'credits_cost' => 1,
-            ],
-            'university_lecture' => [
-                'name' => 'University Lecture',
-                'description' => 'comprehensive university-level medical lecture',
-                'requirements' => $this->getUniversityLectureRequirements(),
-                'credits_cost' => 3,
-            ],
+        // Default configuration for any unknown content type
+        $default = [
+            'name' => ucwords(str_replace('_', ' ', $contentType)),
+            'description' => 'educational content',
+            'requirements' => 'Create comprehensive, detailed, patient-friendly educational content.',
+            'credits_cost' => 1,
+            'min_word_count' => 800,
+            'max_word_count' => 1200,
         ];
         
-        return $defaults[$contentType] ?? $defaults['patient_education'];
+        // Special handling for university_lecture
+        if ($contentType === 'university_lecture') {
+            $default['requirements'] = $this->getUniversityLectureRequirements();
+            $default['min_word_count'] = 2000;
+            $default['max_word_count'] = 3000;
+            $default['credits_cost'] = 3;
+        }
+        
+        return $default;
     }
     
     /**

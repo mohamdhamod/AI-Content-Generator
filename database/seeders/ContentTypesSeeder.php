@@ -41,6 +41,9 @@ class ContentTypesSeeder extends Seeder
                 'credits_cost' => 1,
                 'active' => true,
                 'sort_order' => 1,
+                'prompt_requirements' => 'Include: introduction, general information, wellness tips, when to see a doctor, disclaimer. Reading level: general public. Write comprehensive and detailed content.',
+                'min_word_count' => 800,
+                'max_word_count' => 1200,
             ],
             [
                 'key' => 'what_to_expect',
@@ -70,6 +73,9 @@ class ContentTypesSeeder extends Seeder
                 'credits_cost' => 1,
                 'active' => true,
                 'sort_order' => 2,
+                'prompt_requirements' => 'Describe: appointment flow, typical duration, preparation tips. Friendly, step-by-step format.',
+                'min_word_count' => 600,
+                'max_word_count' => 1000,
             ],
             [
                 'key' => 'seo_blog_article',
@@ -99,6 +105,9 @@ class ContentTypesSeeder extends Seeder
                 'credits_cost' => 2,
                 'active' => true,
                 'sort_order' => 3,
+                'prompt_requirements' => 'Include: H2/H3 headings, meta description, focus keywords, engaging introduction, informational sections, CTA. Write comprehensive and detailed content.',
+                'min_word_count' => 1500,
+                'max_word_count' => 2500,
             ],
             [
                 'key' => 'social_media_post',
@@ -128,6 +137,9 @@ class ContentTypesSeeder extends Seeder
                 'credits_cost' => 1,
                 'active' => true,
                 'sort_order' => 4,
+                'prompt_requirements' => 'Include: engaging hook, educational tip/fact, relevant hashtags, CTA, emoji suggestions.',
+                'min_word_count' => 200,
+                'max_word_count' => 400,
             ],
             [
                 'key' => 'google_review_reply',
@@ -157,6 +169,9 @@ class ContentTypesSeeder extends Seeder
                 'credits_cost' => 1,
                 'active' => true,
                 'sort_order' => 5,
+                'prompt_requirements' => 'Include: thank you, acknowledgment of feedback, commitment to care. Maintain patient privacy.',
+                'min_word_count' => 100,
+                'max_word_count' => 200,
             ],
             [
                 'key' => 'email_follow_up',
@@ -186,6 +201,9 @@ class ContentTypesSeeder extends Seeder
                 'credits_cost' => 1,
                 'active' => true,
                 'sort_order' => 6,
+                'prompt_requirements' => 'Include: subject line, warm greeting, care reminder, general tips, appointment CTA, disclaimer.',
+                'min_word_count' => 300,
+                'max_word_count' => 500,
             ],
             [
                 'key' => 'website_faq',
@@ -215,6 +233,41 @@ class ContentTypesSeeder extends Seeder
                 'credits_cost' => 1,
                 'active' => true,
                 'sort_order' => 7,
+                'prompt_requirements' => 'Create 8-12 Q&A pairs. Each answer: 100-200 words. Informative but encourage professional consultation.',
+                'min_word_count' => 800,
+                'max_word_count' => 2000,
+            ],
+            [
+                'key' => 'university_lecture',
+                'name' => [
+                    'en' => 'University Lecture',
+                    'ar' => 'محاضرة جامعية',
+                    'de' => 'Universitätsvorlesung',
+                    'es' => 'Conferencia Universitaria',
+                    'fr' => 'Cours Universitaire',
+                ],
+                'description' => [
+                    'en' => 'Professional academic lectures with slides for medical education',
+                    'ar' => 'محاضرات أكاديمية احترافية مع شرائح للتعليم الطبي',
+                    'de' => 'Professionelle akademische Vorlesungen mit Folien für die medizinische Ausbildung',
+                    'es' => 'Conferencias académicas profesionales con diapositivas para educación médica',
+                    'fr' => 'Cours académiques professionnels avec diapositives pour l\'éducation médicale',
+                ],
+                'placeholder' => [
+                    'en' => 'Example: Introduction to Dental Anatomy, Periodontal Disease Pathophysiology',
+                    'ar' => 'مثال: مقدمة في تشريح الأسنان، الفيزيولوجيا المرضية لأمراض اللثة',
+                    'de' => 'Beispiel: Einführung in die Zahnanatomie, Pathophysiologie der Parodontalerkrankung',
+                    'es' => 'Ejemplo: Introducción a la Anatomía Dental, Fisiopatología de la Enfermedad Periodontal',
+                    'fr' => 'Exemple: Introduction à l\'anatomie dentaire, Physiopathologie des maladies parodontales',
+                ],
+                'icon' => 'fa-graduation-cap',
+                'color' => '#6366F1',
+                'credits_cost' => 3,
+                'active' => true,
+                'sort_order' => 8,
+                'prompt_requirements' => null, // Uses specialized method in MedicalPromptService
+                'min_word_count' => 2000,
+                'max_word_count' => 3000,
             ],
         ];
 
